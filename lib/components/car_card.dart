@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:auto_app/components/car_page.dart';
 import 'package:auto_app/components/theme_provider.dart';
+import 'package:auto_app/utils/config.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,11 +20,6 @@ class CarCard extends StatefulWidget {
   @override
   _CarCardState createState() => _CarCardState();
 }
-
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};
 
 class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
   @override

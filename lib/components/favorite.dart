@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_app/components/theme_provider.dart';
+import 'package:auto_app/utils/config.dart';
 import 'package:auto_app/utils/favourite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -511,8 +512,3 @@ Future<Map<String, dynamic>> getCardParameters(String carUrl) async {
     return <String, dynamic>{};
   }
 }
-
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};

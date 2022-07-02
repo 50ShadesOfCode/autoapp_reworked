@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_app/utils/config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,9 +119,3 @@ Future<String> _getNotsText(String url) async {
     return 'Новые поступления по вашим параметрам!';
   }
 }
-
-//заголовки для запроса, одинаковые в каждом файле
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};

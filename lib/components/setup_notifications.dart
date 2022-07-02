@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_app/utils/config.dart';
 import 'package:auto_app/utils/url_maker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -436,9 +437,3 @@ class _NotiChars extends State<NotiChars> {
         ));
   }
 }
-
-//Заголовки, есть в каждом файле с запросами
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};

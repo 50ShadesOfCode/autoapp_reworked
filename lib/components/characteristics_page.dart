@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -86,8 +87,3 @@ Future<Map<String, dynamic>> _getParams(String url) async {
   }
   return <String, dynamic>{};
 }
-
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};

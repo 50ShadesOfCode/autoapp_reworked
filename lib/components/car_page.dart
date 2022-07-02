@@ -2,14 +2,10 @@ import 'dart:convert';
 
 import 'package:auto_app/components/carousel.dart';
 import 'package:auto_app/components/characteristics_page.dart';
+import 'package:auto_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};
 
 //получаем словарь с параметрами автомобиля таким же образом, как и в других функциях
 Future<Map<String, dynamic>> getCarParameters(String carUrl) async {

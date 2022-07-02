@@ -1,16 +1,12 @@
 import 'dart:convert';
 
+import 'package:auto_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'car_card.dart';
 
 List<String> cards = <String>[];
-
-Map<String, String> headers = <String, String>{
-  'Content-type': 'application/json',
-  'Accept': 'application/json; charset=UTF-8',
-};
 
 //получает с сервера список ссылок на автомобили по ссылке с заданными параметрами
 Future<int> _getCarUrls(String purl) async {
