@@ -71,7 +71,7 @@ Future<Map<String, dynamic>> _getParams(String url) async {
     headers: headers,
   );
   if (res.statusCode == 200) {
-    Map<String, dynamic> vals = json.decode(res.body);
+    Map<String, dynamic> vals = json.decode(res.body) as Map<String, dynamic>;
     return vals;
   }
   Map<String, dynamic> l = Map<String, dynamic>();

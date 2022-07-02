@@ -5,7 +5,7 @@ import 'dart:convert';
 //две функции, которые переделывают объект класса в json и обратно для хранения в БД
 FavModel favmodelFromJson(String str) {
   final data = json.decode(str);
-  return FavModel.fromMap(data);
+  return FavModel.fromMap(data as Map<String, dynamic>);
 }
 
 String favmodelToJson(FavModel data) {
@@ -21,8 +21,8 @@ class FavModel {
     required this.url,
   });
 
-  factory FavModel.fromMap(Map<String, dynamic> json) => new FavModel(
-        url: json["url"],
+  factory FavModel.fromMap(Map<String, dynamic> json) => FavModel(
+        url: json["url"] as String,
       );
 
   Map<String, dynamic> toMap() => {

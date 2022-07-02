@@ -15,14 +15,16 @@ Map<String, String> headers = {
 //получает с сервера список ссылок на автомобили по ссылке с заданными параметрами
 Future<int> _getCarUrls(String purl) async {
   print(purl);
-  var url = Uri.parse("https://autoparseru.herokuapp.com/getCarsByParams");
-  var body = json.encode({"url": purl});
-  var res = await http.post(url, body: body, headers: headers);
+  final Uri url =
+      Uri.parse('https://autoparseru.herokuapp.com/getCarsByParams');
+  final String body = json.encode({'url': purl});
+  final http.Response res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {
     //создаем список ссылок на картинки на основе массива в ответе сервера
-    Map<String, dynamic> jsonRes = json.decode(res.body);
-    for (int i = 0; i < jsonRes["urls"].length; i++) {
-      cards.add(jsonRes["urls"][i].toString());
+    final Map<String, dynamic> jsonRes =
+        json.decode(res.body) as Map<String, dynamic>;
+    for (int i = 0; i < (jsonRes['urls'] as List<String>).length; i++) {
+      cards.add(jsonRes['urls'][i].toString());
     }
     return 200;
   }

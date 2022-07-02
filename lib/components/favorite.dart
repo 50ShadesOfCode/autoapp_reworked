@@ -158,7 +158,9 @@ class _FavoriteState extends State<Favorite> {
                                     snapshot.data as Map<String, dynamic>;
                                 List<String> urls = [];
                                 for (int i = 0;
-                                    i < cChars["images_urls"].length;
+                                    i <
+                                        (cChars['images_urls'] as List<String>)
+                                            .length;
                                     i++) {
                                   urls.add("http://" +
                                       cChars["images_urls"][i].toString());
@@ -497,7 +499,8 @@ Future<Map<String, dynamic>> getCardParameters(carUrl) async {
   var body = json.encode({"url": carUrl});
   var res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {
-    Map<String, dynamic> jsonRes = json.decode(res.body);
+    Map<String, dynamic> jsonRes =
+        json.decode(res.body) as Map<String, dynamic>;
     return jsonRes;
   } else {
     return Map<String, dynamic>();

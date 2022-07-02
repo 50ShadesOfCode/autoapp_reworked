@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'components/homepage.dart';
 import 'components/themeProvider.dart';
@@ -27,7 +27,7 @@ Future<void> main() async {
 
   await _configureLocalTimeZone();
   await NotificationService().init();
-  int? rate = await getRate();
+  final int? rate = await getRate();
   //устанавливает частоту уведомлений
   if (rate == 0) {
     cancelAllNotifications();
@@ -41,32 +41,34 @@ Future<void> main() async {
 
   //главная функция в приложении, в которой оно само и запускается
   //ChangeNotifier следит за какими либо изменениями, в нашем случае это изменение темы
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    builder: (context, _) {
-      final provider = Provider.of<ThemeProvider>(context);
-      return MaterialApp(
-        title: 'Flutter Demo',
-        themeMode: provider.themeMode,
-        theme: Themes.lightTheme,
-        darkTheme: Themes.darkTheme,
-        home: SplashScreen(),
-      );
-    },
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (BuildContext context) => ThemeProvider(),
+      builder: (BuildContext context, _) {
+        final ThemeProvider provider = Provider.of<ThemeProvider>(context);
+        return MaterialApp(
+          title: 'Flutter Demo',
+          themeMode: provider.themeMode,
+          theme: Themes.lightTheme,
+          darkTheme: Themes.darkTheme,
+          home: SplashScreen(),
+        );
+      },
+    ),
+  );
 }
 
 //Получает частоту уведомлений, сохраненных
 Future<int?> getRate() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getInt("rate");
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getInt('rate');
 }
 
 //Виджет, отвечающий за приветствие в приложении, то что мы видим в начале
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
   final Color backgroundColor = Colors.white;
-  final TextStyle styleTextUnderTheLoader = TextStyle(
+  final TextStyle styleTextUnderTheLoader = const TextStyle(
       fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black);
 
   @override
@@ -75,14 +77,14 @@ class SplashScreen extends StatefulWidget {
 
 //получает имя пользователя из SharedPreferences
 Future<String?> getUsername() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString("username");
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('username');
 }
 
 //реализация состояния класса экрана приветствия
 class _SplashScreenState extends State<SplashScreen> {
   //время экрана приветствия
-  final splashDelay = 3;
+  final int splashDelay = 3;
 
   @override
   void initState() {
@@ -92,8 +94,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   //по прошествии экрана приветствия, переходит на другую страницу
-  _loadWidget() async {
-    var _duration = Duration(seconds: splashDelay);
+  Future<Timer> _loadWidget() async {
+    final Duration _duration = Duration(seconds: splashDelay);
     return Timer(_duration, navigationPage);
   }
 
@@ -127,8 +129,8 @@ class _SplashScreenState extends State<SplashScreen> {
                               height: 300,
                               width: 300,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10.0),
                             ),
                           ],
                         )),
@@ -140,15 +142,15 @@ class _SplashScreenState extends State<SplashScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 if (snap.hasData)
-                                  Text("Привет, " + snap.data.toString() + "!")
+                                  Text('Привет, ' + snap.data.toString() + '!')
                                 else
-                                  Text("Привет!"),
+                                  const Text('Привет!'),
                               ],
                             ),
                             Container(
                               height: 10,
                             ),
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                           ],
                         ),
                       ),
