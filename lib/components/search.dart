@@ -1,35 +1,35 @@
-import 'package:auto_app/components/carListPage.dart';
-import 'package:auto_app/utils/urlMaker.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:auto_app/components/car_list_page.dart';
+import 'package:auto_app/utils/url_maker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class Search extends StatefulWidget {
+  @override
   _SearchState createState() => _SearchState();
 }
 
 //форма поиска сделана при помощи библиотеки flutter_form_builder
 class _SearchState extends State<Search> {
   //ключ для обращения к форме
-  final _formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Поиск"),
+        title: const Text('Поиск'),
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             FormBuilder(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
-                children: [
+                children: <Widget>[
                   Container(
                     child: FormBuilderTextField(
                       name: 'mark',
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Марка автомобиля',
                       ),
                     ),
@@ -37,128 +37,126 @@ class _SearchState extends State<Search> {
                   Container(
                     child: FormBuilderTextField(
                       name: 'model',
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Модель автомобиля',
                       ),
                     ),
                   ),
                   Container(
                     child: FormBuilderDropdown<String?>(
-                        name: 'body',
-                        decoration: InputDecoration(
-                          labelText: 'Кузов',
+                      name: 'body',
+                      decoration: const InputDecoration(
+                        labelText: 'Кузов',
+                      ),
+                      allowClear: true,
+                      hint: const Text('Выберите кузов'),
+                      items: const <DropdownMenuItem<String>>[
+                        DropdownMenuItem<String>(
+                          value: 'SEDAN',
+                          child: Text('Седан'),
                         ),
-                        allowClear: true,
-                        hint: Text('Выберите кузов'),
-                        items: [
-                          DropdownMenuItem(
-                            value: "SEDAN",
-                            child: Text('Седан'),
-                          ),
-                          DropdownMenuItem(
-                            value: "HATCHBACK",
-                            child: Text('Хэтчбек'),
-                          ),
-                          DropdownMenuItem(
-                            value: "HATCHBACK_3_DOORS",
-                            child: Text('Хэтчбек 3 дв.'),
-                          ),
-                          DropdownMenuItem(
-                            value: "HATCHBACK_5_DOORS",
-                            child: Text('Хэтчбек 5 дв.'),
-                          ),
-                          DropdownMenuItem(
-                            value: "LIFTBACK",
-                            child: Text('Лифтбек'),
-                          ),
-                          DropdownMenuItem(
-                            value: "ALLROAD",
-                            child: Text('Внедорожник'),
-                          ),
-                          DropdownMenuItem(
-                            value: "ALLROAD_3_DOORS",
-                            child: Text('Внедорожник 3 дв.'),
-                          ),
-                          DropdownMenuItem(
-                            value: "ALLROAD_5_DOORS",
-                            child: Text('Внедорожник 5 дв.'),
-                          ),
-                          DropdownMenuItem(
-                            value: "WAGON",
-                            child: Text('Универсал'),
-                          ),
-                          DropdownMenuItem(
-                            value: "COUPE",
-                            child: Text('Купе'),
-                          ),
-                          DropdownMenuItem(
-                            value: "MINIVAN",
-                            child: Text('Минивэн'),
-                          ),
-                          DropdownMenuItem(
-                            value: "PICKUP",
-                            child: Text('Пикап'),
-                          ),
-                          DropdownMenuItem(
-                            value: "LIMOUSINE",
-                            child: Text('Лимузин'),
-                          ),
-                          DropdownMenuItem(
-                            value: "VAN",
-                            child: Text('Фургон'),
-                          ),
-                          DropdownMenuItem(
-                            value: "CABRIO",
-                            child: Text('Кабриолет'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          print(val);
-                        }),
+                        DropdownMenuItem<String>(
+                          value: 'HATCHBACK',
+                          child: Text('Хэтчбек'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'HATCHBACK_3_DOORS',
+                          child: Text('Хэтчбек 3 дв.'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'HATCHBACK_5_DOORS',
+                          child: Text('Хэтчбек 5 дв.'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'LIFTBACK',
+                          child: Text('Лифтбек'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'ALLROAD',
+                          child: Text('Внедорожник'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'ALLROAD_3_DOORS',
+                          child: Text('Внедорожник 3 дв.'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'ALLROAD_5_DOORS',
+                          child: Text('Внедорожник 5 дв.'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'WAGON',
+                          child: Text('Универсал'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'COUPE',
+                          child: Text('Купе'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'MINIVAN',
+                          child: Text('Минивэн'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'PICKUP',
+                          child: Text('Пикап'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'LIMOUSINE',
+                          child: Text('Лимузин'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'VAN',
+                          child: Text('Фургон'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'CABRIO',
+                          child: Text('Кабриолет'),
+                        ),
+                      ],
+                      onChanged: print,
+                    ),
                   ),
                   Container(
                     child: FormBuilderDropdown<String?>(
-                        // autovalidate: true,
-                        name: 'transmission',
-                        decoration: InputDecoration(
-                          labelText: 'Коробка передач',
+                      // autovalidate: true,
+                      name: 'transmission',
+                      decoration: const InputDecoration(
+                        labelText: 'Коробка передач',
+                      ),
+                      allowClear: true,
+                      hint: const Text('Выберите вид коробки'),
+                      items: const <DropdownMenuItem<String>>[
+                        DropdownMenuItem<String>(
+                          value: 'AUTO',
+                          child: Text('Автомат'),
                         ),
-                        allowClear: true,
-                        hint: Text('Выберите вид коробки'),
-                        items: [
-                          DropdownMenuItem(
-                            value: "AUTO",
-                            child: Text('Автомат'),
-                          ),
-                          DropdownMenuItem(
-                            value: "AUTOMATIC",
-                            child: Text('Автоматическая'),
-                          ),
-                          DropdownMenuItem(
-                            value: "ROBOT",
-                            child: Text('Робот'),
-                          ),
-                          DropdownMenuItem(
-                            value: "VARIATOR",
-                            child: Text('Вариатор'),
-                          ),
-                          DropdownMenuItem(
-                            value: "MECHANICAL",
-                            child: Text('Механическая'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          print(val);
-                        }),
+                        DropdownMenuItem<String>(
+                          value: 'AUTOMATIC',
+                          child: Text('Автоматическая'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'ROBOT',
+                          child: Text('Робот'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'VARIATOR',
+                          child: Text('Вариатор'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'MECHANICAL',
+                          child: Text('Механическая'),
+                        ),
+                      ],
+                      onChanged: print,
+                    ),
                   ),
                   Container(
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'year_from',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Год от',
                             ),
                           ),
@@ -167,7 +165,7 @@ class _SearchState extends State<Search> {
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'year_to',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'до',
                             ),
                           ),
@@ -178,80 +176,76 @@ class _SearchState extends State<Search> {
                   Container(
                     child: FormBuilderDropdown<String?>(
                         name: 'engine_group',
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Двигатель',
                         ),
                         // initialValue: 'Male',
                         allowClear: true,
-                        hint: Text('Выберите вид двигателя'),
-                        items: [
-                          DropdownMenuItem(
-                            value: "GASOLINE",
+                        hint: const Text('Выберите вид двигателя'),
+                        items: const <DropdownMenuItem<String>>[
+                          DropdownMenuItem<String>(
+                            value: 'GASOLINE',
                             child: Text('Бензин'),
                           ),
-                          DropdownMenuItem(
-                            value: "DIESEL",
+                          DropdownMenuItem<String>(
+                            value: 'DIESEL',
                             child: Text('Дизель'),
                           ),
-                          DropdownMenuItem(
-                            value: "HYBRID",
+                          DropdownMenuItem<String>(
+                            value: 'HYBRID',
                             child: Text('Гибрид'),
                           ),
-                          DropdownMenuItem(
-                            value: "ELECTRO",
+                          DropdownMenuItem<String>(
+                            value: 'ELECTRO',
                             child: Text('Электро'),
                           ),
-                          DropdownMenuItem(
-                            value: "TURBO",
+                          DropdownMenuItem<String>(
+                            value: 'TURBO',
                             child: Text('Турбированный'),
                           ),
-                          DropdownMenuItem(
-                            value: "ATMO",
+                          DropdownMenuItem<String>(
+                            value: 'ATMO',
                             child: Text('Атмосферный'),
                           ),
-                          DropdownMenuItem(
-                            value: "LPG",
+                          DropdownMenuItem<String>(
+                            value: 'LPG',
                             child: Text('Газобалонное оборудование'),
                           ),
                         ],
-                        onChanged: (val) {
-                          print(val);
-                        }),
+                        onChanged: print),
                   ),
                   Container(
                     child: FormBuilderDropdown<String?>(
                         name: 'gear_type',
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Привод',
                         ),
                         allowClear: true,
-                        hint: Text('Выберите вид привода'),
-                        items: [
-                          DropdownMenuItem(
-                            value: "FORWARD_CONTROL",
+                        hint: const Text('Выберите вид привода'),
+                        items: const <DropdownMenuItem<String>>[
+                          DropdownMenuItem<String>(
+                            value: 'FORWARD_CONTROL',
                             child: Text('Передний'),
                           ),
-                          DropdownMenuItem(
-                            value: "REAR_DRIVE",
+                          DropdownMenuItem<String>(
+                            value: 'REAR_DRIVE',
                             child: Text('Задний'),
                           ),
-                          DropdownMenuItem(
-                            value: "ALL_WHEEL_DRIVE",
+                          DropdownMenuItem<String>(
+                            value: 'ALL_WHEEL_DRIVE',
                             child: Text('Полный'),
                           ),
                         ],
-                        onChanged: (val) {
-                          print(val);
-                        }),
+                        onChanged: print),
                   ),
                   Container(
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'km_age_from',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Пробег от',
                             ),
                           ),
@@ -260,7 +254,7 @@ class _SearchState extends State<Search> {
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'km_age_to',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'до',
                             ),
                           ),
@@ -270,12 +264,12 @@ class _SearchState extends State<Search> {
                   ),
                   Container(
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'displacement_from',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Объем от',
                             ),
                           ),
@@ -284,7 +278,7 @@ class _SearchState extends State<Search> {
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'displacement_to',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'до',
                             ),
                           ),
@@ -294,12 +288,12 @@ class _SearchState extends State<Search> {
                   ),
                   Container(
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'price_from',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Цена от',
                             ),
                           ),
@@ -308,7 +302,7 @@ class _SearchState extends State<Search> {
                           flex: 50,
                           child: FormBuilderTextField(
                             name: 'price_to',
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'до',
                             ),
                           ),
@@ -323,9 +317,9 @@ class _SearchState extends State<Search> {
               children: <Widget>[
                 Expanded(
                   child: MaterialButton(
-                    color: Theme.of(context).accentColor,
-                    child: Text(
-                      "Найти!",
+                    color: Theme.of(context).colorScheme.secondary,
+                    child: const Text(
+                      'Найти!',
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () async {
@@ -334,28 +328,29 @@ class _SearchState extends State<Search> {
                       if (_formKey.currentState?.validate() == true) {
                         print(_formKey.currentState?.value);
                         //создаем ссылку на автомобили
-                        String url = makeUrl(_formKey.currentState?.value
+                        final String url = makeUrl(_formKey.currentState?.value
                             as Map<String, dynamic>);
                         print(url);
                         //переходим на страницу со списком автомобилей
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => CarListPage(url: url),
+                            MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) =>
+                                  CarListPage(url: url),
                             ));
                       } else {
-                        print("validation failed");
+                        print('validation failed');
                       }
                     },
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 //кнопка сбросить сбрасывает данные формы
                 Expanded(
                   child: MaterialButton(
-                    color: Theme.of(context).accentColor,
-                    child: Text(
-                      "Сбросить",
+                    color: Theme.of(context).colorScheme.secondary,
+                    child: const Text(
+                      'Сбросить',
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {

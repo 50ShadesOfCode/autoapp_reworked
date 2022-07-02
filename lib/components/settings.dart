@@ -1,12 +1,13 @@
-import 'package:auto_app/components/setupNotiChars.dart';
-import 'package:auto_app/components/themeProvider.dart';
+import 'package:auto_app/components/setup_notifications.dart';
+import 'package:auto_app/components/theme_provider.dart';
 import 'package:auto_app/utils/notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
+  @override
   _SettingsState createState() => _SettingsState();
 }
 
@@ -14,8 +15,8 @@ class _SettingsState extends State<Settings> {
   //выбранная частота уведомлений
   int selectedRate = 0;
   //контроллеры для полей с текстом
-  final _textController = TextEditingController();
-  final _textControllerMail = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+  final TextEditingController _textControllerMail = TextEditingController();
   @override
   void dispose() {
     _textController.dispose();
@@ -27,21 +28,21 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Настройки'),
+        title: const Text('Настройки'),
       ),
       body: Center(
         child: Column(
-          children: [
+          children: <Widget>[
             //форма для введения имени пользователя
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Row(
-                children: [
+                children: <Widget>[
                   Container(
                     child: Expanded(
                       flex: 75,
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             hintText: 'Введите имя пользователя'),
                         controller: _textController,
                       ),
@@ -52,27 +53,30 @@ class _SettingsState extends State<Settings> {
                       child: ElevatedButton(
                           //при нажатии сохраняем имя пользователя в SharedPreferences если что-то введено
                           onPressed: () async {
-                            if (_textController.text == "") {
+                            if (_textController.text == '') {
                               return;
                             }
-                            final prefs = await SharedPreferences.getInstance();
-                            prefs.setString("username", _textController.text);
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString('username', _textController.text);
                             print(_textController.text);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Имя пользователя сохранено")));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Имя пользователя сохранено')));
                           },
-                          child: Text("Сохранить")))
+                          child: const Text('Сохранить')))
                 ],
               ),
             ),
             //перевключение темы
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
+              margin: const EdgeInsets.symmetric(vertical: 5),
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Сменить тему"),
+                  children: <Widget>[
+                    const Text('Сменить тему'),
                     ChangeThemeButtonWidget(),
                   ],
                 ),
@@ -80,9 +84,9 @@ class _SettingsState extends State<Settings> {
             ),
             //выпадающий список с частотами уведомлений
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
+              margin: const EdgeInsets.symmetric(vertical: 5),
               child: DropdownButton<int>(
-                  hint: Text("Выберите частоту уведомлений"),
+                  hint: const Text('Выберите частоту уведомлений'),
                   value: selectedRate,
                   //при выборе какого либо элемента сохраняет частоту в SharedPreferences и запускает уведомления с выбранной частотой
                   onChanged: (int? value) async {
@@ -90,8 +94,9 @@ class _SettingsState extends State<Settings> {
                       selectedRate = value as int;
                     });
                     print(value);
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setInt("rate", value as int);
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setInt('rate', value as int);
                     cancelAllNotifications();
                     if (value == 1) {
                       schedule45MinNotification();
@@ -104,16 +109,16 @@ class _SettingsState extends State<Settings> {
                     }
                   },
                   //список частот уведомлений
-                  items: [
+                  items: <DropdownMenuItem<int>>[
                     DropdownMenuItem<int>(
                       value: 0,
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "Не показывать уведомления",
+                            'Не показывать уведомления',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
@@ -122,12 +127,12 @@ class _SettingsState extends State<Settings> {
                     DropdownMenuItem<int>(
                       value: 1,
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "Показывать каждые 45 минут",
+                            'Показывать каждые 45 минут',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
@@ -136,12 +141,12 @@ class _SettingsState extends State<Settings> {
                     DropdownMenuItem<int>(
                       value: 2,
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "Показывать каждый час",
+                            'Показывать каждый час',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
@@ -150,12 +155,12 @@ class _SettingsState extends State<Settings> {
                     DropdownMenuItem<int>(
                       value: 3,
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "Показывать ежедневно",
+                            'Показывать ежедневно',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
@@ -165,27 +170,29 @@ class _SettingsState extends State<Settings> {
             ),
             //кнопка для перехода на страницу с параметрами уведомлений
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
+              margin: const EdgeInsets.symmetric(vertical: 5),
               child: TextButton(
-                onPressed: () => {
+                onPressed: () => <void>{
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NotiChars()),
+                    MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) => NotiChars()),
                   )
                 },
-                child: Text("Изменить параметры уведомлений"),
+                child: const Text('Изменить параметры уведомлений'),
               ),
             ),
             //поле для ввода сообщения обратной связи. при нажатии на отправить открывается почта уже с введенной темой текстом и тд
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Row(
-                children: [
+                children: <Widget>[
                   Container(
                     child: Expanded(
                       flex: 75,
                       child: TextField(
-                        decoration: InputDecoration(hintText: 'Обратная связь'),
+                        decoration:
+                            const InputDecoration(hintText: 'Обратная связь'),
                         controller: _textControllerMail,
                       ),
                     ),
@@ -194,17 +201,19 @@ class _SettingsState extends State<Settings> {
                       flex: 30,
                       child: ElevatedButton(
                           onPressed: () async {
-                            if (_textControllerMail.text == "") {
+                            if (_textControllerMail.text == '') {
                               return;
                             }
                             final Email email = Email(
                                 body: _textControllerMail.text,
-                                subject: "Обратная связь в приложении",
-                                recipients: ['kostya9907@mail.ru'],
+                                subject: 'Обратная связь в приложении',
+                                recipients: <String>[
+                                  'kaktysh20040130@gmail.com'
+                                ],
                                 isHTML: false);
                             await FlutterEmailSender.send(email);
                           },
-                          child: Text("Отправить")))
+                          child: const Text('Отправить')))
                 ],
               ),
             )
@@ -219,13 +228,14 @@ class _SettingsState extends State<Settings> {
 class ChangeThemeButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return Switch.adaptive(
       //начальное значение
       value: themeProvider.isDarkMode,
       //если белая, включаем темную, и наоборот
-      onChanged: (value) {
-        final provider = Provider.of<ThemeProvider>(context, listen: false);
+      onChanged: (bool value) {
+        final ThemeProvider provider =
+            Provider.of<ThemeProvider>(context, listen: false);
         provider.toggleTheme(value);
       },
     );
@@ -233,4 +243,4 @@ class ChangeThemeButtonWidget extends StatelessWidget {
 }
 
 //список со значениями частот. 0 - вообще нет, 1 - 45 минут, 2 - 1 час, 3 - ежедневно
-List<int> values = [0, 1, 2, 3];
+List<int> values = <int>[0, 1, 2, 3];

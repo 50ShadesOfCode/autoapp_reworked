@@ -4,12 +4,12 @@ import 'dart:convert';
 
 //две функции, которые переделывают объект класса в json и обратно для хранения в БД
 FavModel favmodelFromJson(String str) {
-  final data = json.decode(str);
+  final dynamic data = json.decode(str);
   return FavModel.fromMap(data as Map<String, dynamic>);
 }
 
 String favmodelToJson(FavModel data) {
-  final jsData = data.toMap();
+  final Map<String, dynamic> jsData = data.toMap();
   return json.encode(jsData);
 }
 
@@ -22,10 +22,10 @@ class FavModel {
   });
 
   factory FavModel.fromMap(Map<String, dynamic> json) => FavModel(
-        url: json["url"] as String,
+        url: json['url'] as String,
       );
 
-  Map<String, dynamic> toMap() => {
-        "url": url,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'url': url,
       };
 }

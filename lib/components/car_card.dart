@@ -2,26 +2,25 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_app/components/carPage.dart';
-import 'package:auto_app/components/themeProvider.dart';
+import 'package:auto_app/components/car_page.dart';
+import 'package:auto_app/components/theme_provider.dart';
 import 'package:favorite_button/favorite_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'carouselPage.dart';
+import 'carousel_page.dart';
 
 class CarCard extends StatefulWidget {
   final String cardUrl;
-  CarCard({required String cardUrl}) : this.cardUrl = cardUrl;
+  const CarCard({required this.cardUrl});
   @override
-  _CarCardState createState() => _CarCardState(cardUrl);
+  _CarCardState createState() => _CarCardState();
 }
 
-Map<String, String> headers = {
+Map<String, String> headers = <String, String>{
   'Content-type': 'application/json',
   'Accept': 'application/json; charset=UTF-8',
 };
@@ -31,13 +30,18 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
   //нужно для того, чтобы карточки не сбрасывались при обновлении страницы
   bool get wantKeepAlive => true;
 
-  _CarCardState(this.cardUrl);
-  final String cardUrl;
+  late final String cardUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    cardUrl = widget.cardUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
-        future: getCardParameters(this.cardUrl),
+        future: getCardParameters(cardUrl),
         builder: (BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot) {
           final ThemeProvider provider = Provider.of<ThemeProvider>(context);
@@ -46,7 +50,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
             return Container(
                 decoration: BoxDecoration(
                   color: provider.isDarkMode ? Colors.black : Colors.white,
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.blueAccent.withOpacity(0.3),
                       spreadRadius: 1,
@@ -73,7 +77,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
             return Container(
                 decoration: BoxDecoration(
                   color: provider.isDarkMode ? Colors.black : Colors.white,
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.blueAccent.withOpacity(0.3),
                       spreadRadius: 1,
@@ -96,20 +100,21 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                 ));
           }
           //если данные получены, то есть два случая которые надо рассматривать отдельно. Если ссылка на новый автомобиль или подержаный.
-          Map<String, dynamic> cChars = snapshot.data as Map<String, dynamic>;
-          List<String> urls = [];
+          final Map<String, dynamic> cChars =
+              snapshot.data as Map<String, dynamic>;
+          final List<String> urls = <String>[];
           for (int i = 0;
               i < (cChars['images_urls'] as List<String>).length;
               i++) {
             urls.add('http://' + (cChars['images_urls'] as List<String>)[i]);
           }
           //если на подержаный, то возвращаем карточку для подержаного
-          if (!this.cardUrl.contains('/new/')) {
+          if (!cardUrl.contains('/new/')) {
             return Container(
               //оформление карточки
               decoration: BoxDecoration(
                 color: provider.isDarkMode ? Colors.black : Colors.white,
-                boxShadow: [
+                boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: Colors.blueAccent.withOpacity(0.3),
                     spreadRadius: 1,
@@ -129,117 +134,120 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
               margin: const EdgeInsets.symmetric(vertical: 5),
               child: InkWell(
                 //при нажатии на карточку будет открываться страница автомобиля с заданной ссылкой
-                onTap: () => {
+                onTap: () => <void>{
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                           builder: (BuildContext context) =>
-                              CarPage(carUrl: this.cardUrl)))
+                              CarPage(carUrl: cardUrl)))
                 },
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Expanded(
-                    flex: 25,
-                    child: InkWell(
-                      onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                CarouselPage(imageUrls: urls),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 25,
+                        child: InkWell(
+                          onTap: () => <void>{
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) =>
+                                    CarouselPage(imageUrls: urls),
+                              ),
+                            )
+                          },
+                          child: Container(
+                            child: Image(
+                              image: NetworkImage('http://' +
+                                  cChars['images_urls'][0].toString()),
+                            ),
                           ),
-                        )
-                      },
-                      child: Container(
-                        child: Image(
-                          image: NetworkImage(
-                              'http://' + cChars['images_urls'][0].toString()),
                         ),
                       ),
-                    ),
-                  ),
-                  //далее колонки для показа информации о автомобиле
-                  Expanded(
-                    flex: 30,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Text(cChars['name'].toString()),
-                          margin: const EdgeInsets.symmetric(vertical: 3),
+                      //далее колонки для показа информации о автомобиле
+                      Expanded(
+                        flex: 30,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Text(cChars['name'].toString()),
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                            ),
+                            Container(
+                              child: Text(cChars['kmage'].toString()),
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                            ),
+                            Container(
+                              child: Text(cChars['engine'].toString()),
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                            ),
+                          ],
                         ),
-                        Container(
-                          child: Text(cChars['kmage'].toString()),
-                          margin: const EdgeInsets.symmetric(vertical: 3),
+                      ),
+                      Expanded(
+                        flex: 15,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                                child: Text(cChars['price'].toString()),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 3)),
+                            Container(
+                              child: Text(cChars['color'].toString()),
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                            ),
+                            Container(
+                              child: Text(cChars['drive'].toString()),
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                            ),
+                          ],
                         ),
-                        Container(
-                          child: Text(cChars['engine'].toString()),
-                          margin: const EdgeInsets.symmetric(vertical: 3),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        //кнопка избранное, при нажатии открывает бд и в зависимости от того активна кнопка или нет добавляет ил удаляет данный автомобиль из бд
+                        child: StarButton(
+                          iconSize: 45,
+                          valueChanged: (bool value) async {
+                            if (value) {
+                              final Directory docsPath =
+                                  await getApplicationDocumentsDirectory();
+                              final Database db = await openDatabase(
+                                  docsPath.path + 'autofavs.db',
+                                  version: 1,
+                                  onCreate: (Database db, int version) async {
+                                await db.execute('CREATE TABLE Favs ('
+                                    'url TEXT'
+                                    ')');
+                              });
+                              print('inserted');
+                              await db.rawInsert(
+                                  'INSERT Into Favs (url)'
+                                  ' VALUES (?)',
+                                  <Object>[cardUrl]);
+                              print('ins');
+                            } else {
+                              final Directory docsPath =
+                                  await getApplicationDocumentsDirectory();
+                              final Database db = await openDatabase(
+                                  docsPath.path + 'autofavs.db',
+                                  version: 1,
+                                  onCreate: (Database db, int version) async {
+                                await db.execute('CREATE TABLE Favs ('
+                                    'url TEXT'
+                                    ')');
+                              });
+                              db.delete('Favs',
+                                  where: 'url = ?',
+                                  whereArgs: <Object>[cardUrl]);
+                              print('del');
+                            }
+                          },
                         ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 15,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            child: Text(cChars['price'].toString()),
-                            margin: const EdgeInsets.symmetric(vertical: 3)),
-                        Container(
-                          child: Text(cChars['color'].toString()),
-                          margin: const EdgeInsets.symmetric(vertical: 3),
-                        ),
-                        Container(
-                          child: Text(cChars['drive'].toString()),
-                          margin: const EdgeInsets.symmetric(vertical: 3),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 8,
-                    //кнопка избранное, при нажатии открывает бд и в зависимости от того активна кнопка или нет добавляет ил удаляет данный автомобиль из бд
-                    child: StarButton(
-                      iconSize: 45,
-                      valueChanged: (value) async {
-                        if (value as bool) {
-                          Directory docsPath =
-                              await getApplicationDocumentsDirectory();
-                          Database db = await openDatabase(
-                              docsPath.path + 'autofavs.db',
-                              version: 1,
-                              onCreate: (Database db, int version) async {
-                            await db.execute('CREATE TABLE Favs ('
-                                'url TEXT'
-                                ')');
-                          });
-                          print('inserted');
-                          int raw = await db.rawInsert(
-                              'INSERT Into Favs (url)'
-                              ' VALUES (?)',
-                              [this.cardUrl]);
-                          print('ins');
-                        } else {
-                          Directory docsPath =
-                              await getApplicationDocumentsDirectory();
-                          Database db = await openDatabase(
-                              docsPath.path + 'autofavs.db',
-                              version: 1,
-                              onCreate: (Database db, int version) async {
-                            await db.execute('CREATE TABLE Favs ('
-                                'url TEXT'
-                                ')');
-                          });
-                          db.delete('Favs',
-                              where: 'url = ?', whereArgs: [this.cardUrl]);
-                          print('del');
-                        }
-                      },
-                    ),
-                  ),
-                ]),
+                      ),
+                    ]),
               ),
             );
           } else {
@@ -247,7 +255,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
             return Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                boxShadow: [
+                boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: Colors.blueAccent.withOpacity(0.3),
                     spreadRadius: 1,
@@ -266,22 +274,23 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
               height: MediaQuery.of(context).size.height * 0.15,
               margin: const EdgeInsets.symmetric(vertical: 5),
               child: InkWell(
-                onTap: () => {
+                onTap: () => <void>{
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                           builder: (BuildContext context) =>
-                              CarPage(carUrl: this.cardUrl)))
+                              CarPage(carUrl: cardUrl)))
                 },
                 child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+                        Widget>[
                   Expanded(
                     flex: 25,
                     child: InkWell(
-                      onTap: () => {
+                      onTap: () => <void>{
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          MaterialPageRoute<dynamic>(
                             builder: (BuildContext context) =>
                                 CarouselPage(imageUrls: urls),
                           ),
@@ -299,7 +308,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                     flex: 30,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: <Widget>[
                         Container(
                           child: Text(cChars['name'].toString()),
                           margin: const EdgeInsets.symmetric(vertical: 3),
@@ -320,7 +329,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                     flex: 15,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: <Widget>[
                         Container(
                             child: Text(cChars['price'].toString()),
                             margin: const EdgeInsets.symmetric(vertical: 3)),
@@ -339,11 +348,11 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                     flex: 8,
                     child: StarButton(
                       iconSize: 45,
-                      valueChanged: (value) async {
-                        if (value as bool) {
-                          Directory docsPath =
+                      valueChanged: (bool value) async {
+                        if (value) {
+                          final Directory docsPath =
                               await getApplicationDocumentsDirectory();
-                          Database db = await openDatabase(
+                          final Database db = await openDatabase(
                               docsPath.path + 'autofavs.db',
                               version: 1,
                               onCreate: (Database db, int version) async {
@@ -352,15 +361,15 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                                 ')');
                           });
                           print('inserted');
-                          int raw = await db.rawInsert(
+                          await db.rawInsert(
                               'INSERT Into Favs (url)'
                               ' VALUES (?)',
-                              [this.cardUrl]);
+                              <Object>[cardUrl]);
                           print('ins');
                         } else {
-                          Directory docsPath =
+                          final Directory docsPath =
                               await getApplicationDocumentsDirectory();
-                          Database db = await openDatabase(
+                          final Database db = await openDatabase(
                               docsPath.path + 'autofavs.db',
                               version: 1,
                               onCreate: (Database db, int version) async {
@@ -369,7 +378,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                                 ')');
                           });
                           db.delete('Favs',
-                              where: 'url = ?', whereArgs: [this.cardUrl]);
+                              where: 'url = ?', whereArgs: <Object>[cardUrl]);
                           print('del');
                         }
                       },
@@ -384,20 +393,20 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
 }
 
 //получает параметры о автомобиле по заданной ссылке
-Future<Map<String, dynamic>> getCardParameters(carUrl) async {
+Future<Map<String, dynamic>> getCardParameters(String carUrl) async {
   print(carUrl);
-  Uri url = Uri.parse('https://autoparseru.herokuapp.com/getCardByUrl');
+  final Uri url = Uri.parse('https://autoparseru.herokuapp.com/getCardByUrl');
   //тело запроса
-  String body = json.encode({'url': carUrl});
+  final String body = json.encode(<String, dynamic>{'url': carUrl});
   //сам запрос
-  http.Response res = await http.post(url, body: body, headers: headers);
+  final http.Response res = await http.post(url, body: body, headers: headers);
   //проверка если запрос успешен
   if (res.statusCode == 200) {
     //словарь json с ответом сервера
-    Map<String, dynamic> jsonRes =
+    final Map<String, dynamic> jsonRes =
         json.decode(res.body) as Map<String, dynamic>;
     return jsonRes;
   } else {
-    return Map<String, dynamic>();
+    return <String, dynamic>{};
   }
 }

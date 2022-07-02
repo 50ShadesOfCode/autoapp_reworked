@@ -5,28 +5,35 @@ import 'package:http/http.dart' as http;
 
 class CharsPage extends StatefulWidget {
   final String url;
-  CharsPage({required String url}) : this.url = url;
-  _CharsPageState createState() => _CharsPageState(this.url);
+  const CharsPage({required this.url});
+  @override
+  _CharsPageState createState() => _CharsPageState();
 }
 
 class _CharsPageState extends State<CharsPage> {
   //ссылка на автомобиль, есть в каждом объекте классов карточек, страниц автомобилей, характеристик
-  final String url;
-  _CharsPageState(this.url);
+  late final String url;
+
+  @override
+  void initState() {
+    url = widget.url;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Характеристики"),
+          title: const Text('Характеристики'),
           automaticallyImplyLeading: true,
         ),
         body: FutureBuilder<Map<String, dynamic>>(
-          future: _getParams(this.url),
+          future: _getParams(url),
           builder:
               (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snap) {
             if (snap.connectionState == ConnectionState.waiting) {
               return Container(
-                child: Center(
+                child: const Center(
                   //ожидание
                   child: CircularProgressIndicator(),
                 ),
@@ -37,13 +44,15 @@ class _CharsPageState extends State<CharsPage> {
               child: ListView.builder(
                 itemCount: snap.data?.length,
                 itemBuilder: (BuildContext context, int index) {
-                  String key = (snap.data?.keys.elementAt(index)).toString();
+                  final String key =
+                      (snap.data?.keys.elementAt(index)).toString();
                   print(snap.data);
                   //элемент списка с заданным название и параметром
                   return Container(
-                    margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           child: Text(key),
                           flex: 50,
@@ -65,20 +74,20 @@ class _CharsPageState extends State<CharsPage> {
 
 //ответ с сервера приходит в виде название:характеристика, поэтому нужен обычный словарь
 Future<Map<String, dynamic>> _getParams(String url) async {
-  var res = await http.post(
+  final http.Response res = await http.post(
     Uri.parse('https://autoparseru.herokuapp.com/getCharsByUrl'),
-    body: json.encode({"url": url}),
+    body: json.encode(<String, dynamic>{'url': url}),
     headers: headers,
   );
   if (res.statusCode == 200) {
-    Map<String, dynamic> vals = json.decode(res.body) as Map<String, dynamic>;
+    final Map<String, dynamic> vals =
+        json.decode(res.body) as Map<String, dynamic>;
     return vals;
   }
-  Map<String, dynamic> l = Map<String, dynamic>();
-  return l;
+  return <String, dynamic>{};
 }
 
-Map<String, String> headers = {
+Map<String, String> headers = <String, String>{
   'Content-type': 'application/json',
   'Accept': 'application/json; charset=UTF-8',
 };

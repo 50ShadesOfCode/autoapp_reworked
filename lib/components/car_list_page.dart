@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'carCard.dart';
+import 'car_card.dart';
 
-List<String> cards = [];
+List<String> cards = <String>[];
 
-Map<String, String> headers = {
+Map<String, String> headers = <String, String>{
   'Content-type': 'application/json',
   'Accept': 'application/json; charset=UTF-8',
 };
@@ -17,7 +17,7 @@ Future<int> _getCarUrls(String purl) async {
   print(purl);
   final Uri url =
       Uri.parse('https://autoparseru.herokuapp.com/getCarsByParams');
-  final String body = json.encode({'url': purl});
+  final String body = json.encode(<String, dynamic>{'url': purl});
   final http.Response res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {
     //создаем список ссылок на картинки на основе массива в ответе сервера
@@ -33,27 +33,32 @@ Future<int> _getCarUrls(String purl) async {
 
 class CarListPage extends StatefulWidget {
   final String url;
-  CarListPage({required String url}) : this.url = url;
+  const CarListPage({required this.url});
   @override
-  _CarListPageState createState() => _CarListPageState(url);
+  _CarListPageState createState() => _CarListPageState();
 }
 
 class _CarListPageState extends State<CarListPage> {
-  _CarListPageState(this.url);
-  final String url;
+  late final String url;
+
+  @override
+  void initState() {
+    super.initState();
+    url = widget.url;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Результаты'),
+        title: const Text('Результаты'),
       ),
       //FutureBuilder ждет пока выполнится функция, удобно для нашего случая когда у сервера большое время ответа.
-      body: FutureBuilder(
-        future: _getCarUrls(this.url),
+      body: FutureBuilder<int>(
+        future: _getCarUrls(url),
         builder: (BuildContext context, AsyncSnapshot<int> snap) {
           return Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,

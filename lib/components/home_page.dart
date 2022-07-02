@@ -1,7 +1,7 @@
 import 'package:auto_app/components/favorite.dart';
 import 'package:auto_app/components/search.dart';
 import 'package:auto_app/components/settings.dart';
-import 'package:auto_app/components/themeProvider.dart';
+import 'package:auto_app/components/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -25,7 +25,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<ThemeProvider>(context);
+    final ThemeProvider provider = Provider.of<ThemeProvider>(context);
     //сама панель с заданными параметрами и темой
     return PersistentTabView(
       context,
@@ -33,7 +33,7 @@ class HomePageState extends State<HomePage> {
       screens: _buildScreens(),
       items: _navbarsItems(),
       confineInSafeArea: true,
-      backgroundColor: (provider.isDarkMode ? Colors.black : Colors.white),
+      backgroundColor: provider.isDarkMode ? Colors.black : Colors.white,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,
@@ -45,7 +45,7 @@ class HomePageState extends State<HomePage> {
 
 //список экранов для нижней панели
 List<Widget> _buildScreens() {
-  return [
+  return <Widget>[
     Settings(),
     Search(),
     Favorite(),
@@ -54,22 +54,22 @@ List<Widget> _buildScreens() {
 
 //элементы панели навигации: настройки, поиск и избранное.
 List<PersistentBottomNavBarItem> _navbarsItems() {
-  return [
+  return <PersistentBottomNavBarItem>[
     PersistentBottomNavBarItem(
-      icon: Icon(CupertinoIcons.settings_solid),
-      title: "Настройки",
+      icon: const Icon(CupertinoIcons.settings_solid),
+      title: 'Настройки',
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
     PersistentBottomNavBarItem(
-      icon: Icon(CupertinoIcons.search),
-      title: "Поиск",
+      icon: const Icon(CupertinoIcons.search),
+      title: 'Поиск',
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
     PersistentBottomNavBarItem(
-      icon: Icon(CupertinoIcons.bookmark),
-      title: "Избранное",
+      icon: const Icon(CupertinoIcons.bookmark),
+      title: 'Избранное',
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),

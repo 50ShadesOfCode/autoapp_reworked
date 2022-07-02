@@ -9,8 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'components/homepage.dart';
-import 'components/themeProvider.dart';
+import 'components/home_page.dart';
+import 'components/theme_provider.dart';
 
 //Получает и настраивает время для приложения в соответствии с местным
 //Используется для корректной отправки уведомлений
@@ -42,7 +42,7 @@ Future<void> main() async {
   //главная функция в приложении, в которой оно само и запускается
   //ChangeNotifier следит за какими либо изменениями, в нашем случае это изменение темы
   runApp(
-    ChangeNotifierProvider(
+    ChangeNotifierProvider<ThemeProvider>(
       create: (BuildContext context) => ThemeProvider(),
       builder: (BuildContext context, _) {
         final ThemeProvider provider = Provider.of<ThemeProvider>(context);
@@ -101,8 +101,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   //сама функция перехода на другую страницу
   void navigationPage() {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => HomePage()));
   }
 
   @override

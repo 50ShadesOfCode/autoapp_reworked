@@ -1,36 +1,37 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:auto_app/components/themeProvider.dart';
-import 'package:auto_app/utils/FavModel.dart';
+import 'package:auto_app/components/theme_provider.dart';
+import 'package:auto_app/utils/favourite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:http/http.dart' as http;
 
-import 'carPage.dart';
-import 'carouselPage.dart';
+import 'car_page.dart';
+import 'carousel_page.dart';
 
 //функция, которая возвращает список ссылок на автомобили, хранящиеся в бд
 Future<List<String>> buildList() async {
   //получаем путь к папке "Documents"
-  var docsPath = await getApplicationDocumentsDirectory();
+  final Directory docsPath = await getApplicationDocumentsDirectory();
   //создаем или открываем "autofavs.db"
-  var db = await openDatabase(docsPath.path + 'autofavs.db', version: 1,
-      onCreate: (Database db, int version) async {
-    await db.execute("CREATE TABLE Favs ("
-        "url TEXT"
-        ")");
+  final Database db = await openDatabase(docsPath.path + 'autofavs.db',
+      version: 1, onCreate: (Database db, int version) async {
+    await db.execute('CREATE TABLE Favs ('
+        'url TEXT'
+        ')');
   });
   //получаем все избранные
-  var res = await db.query("Favs");
+  final List<Map<String, Object?>> res = await db.query('Favs');
   //создаем из них список
-  List<FavModel> list =
-      res.isNotEmpty ? res.map((c) => FavModel.fromMap(c)).toList() : [];
-  List<String> urls = [];
+  final List<FavModel> list =
+      res.isNotEmpty ? res.map(FavModel.fromMap).toList() : <FavModel>[];
+  final List<String> urls = <String>[];
   //а потом список только из ссылок
-  for (FavModel ms in list) {
+  for (final FavModel ms in list) {
     urls.add(ms.url);
   }
   return urls;
@@ -46,15 +47,15 @@ class _FavoriteState extends State<Favorite> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Избранные'),
-        actions: [
+        title: const Text('Избранные'),
+        actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 20.0),
+            padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                this.setState(() {});
+                setState(() {});
               },
-              child: Icon(
+              child: const Icon(
                 CupertinoIcons.arrow_counterclockwise,
                 size: 26.0,
               ),
@@ -67,7 +68,7 @@ class _FavoriteState extends State<Favorite> {
           future: buildList(),
           builder: (BuildContext context, AsyncSnapshot<List<String>> snap) {
             return Container(
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -82,27 +83,27 @@ class _FavoriteState extends State<Favorite> {
                           //в целом работает так же как и CarCard, но перенесено сюда
                           //потому что необходимо обновлять страницу при обновлении или добавлении избранного
                           return FutureBuilder<Map<String, dynamic>>(
-                              future: getCardParameters(snap.data?[index]),
+                              future: getCardParameters(snap.data![index]),
                               builder: (BuildContext context,
                                   AsyncSnapshot<Map<String, dynamic>>
                                       snapshot) {
-                                final provider =
+                                final ThemeProvider provider =
                                     Provider.of<ThemeProvider>(context);
                                 //если все еще ожидаем ответ, возвращаем индикатор загрузки
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   return Container(
                                       decoration: BoxDecoration(
-                                        color: (provider.isDarkMode
+                                        color: provider.isDarkMode
                                             ? Colors.black
-                                            : Colors.white),
-                                        boxShadow: [
+                                            : Colors.white,
+                                        boxShadow: <BoxShadow>[
                                           BoxShadow(
                                             color: Colors.blueAccent
                                                 .withOpacity(0.3),
                                             spreadRadius: 1,
                                             blurRadius: 2,
-                                            offset: Offset(0, 3),
+                                            offset: const Offset(0, 3),
                                           ),
                                         ],
                                         borderRadius: BorderRadius.circular(10),
@@ -116,8 +117,9 @@ class _FavoriteState extends State<Favorite> {
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.15,
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      child: Center(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: const Center(
                                         child: CircularProgressIndicator(),
                                       ));
                                 }
@@ -125,16 +127,16 @@ class _FavoriteState extends State<Favorite> {
                                 if (snapshot.data == null) {
                                   return Container(
                                       decoration: BoxDecoration(
-                                        color: (provider.isDarkMode
+                                        color: provider.isDarkMode
                                             ? Colors.black
-                                            : Colors.white),
-                                        boxShadow: [
+                                            : Colors.white,
+                                        boxShadow: <BoxShadow>[
                                           BoxShadow(
                                             color: Colors.blueAccent
                                                 .withOpacity(0.3),
                                             spreadRadius: 1,
                                             blurRadius: 2,
-                                            offset: Offset(0, 3),
+                                            offset: const Offset(0, 3),
                                           ),
                                         ],
                                         borderRadius: BorderRadius.circular(10),
@@ -148,40 +150,41 @@ class _FavoriteState extends State<Favorite> {
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.15,
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      child: Center(
-                                        child: Text("Сервер не отвечает!"),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: const Center(
+                                        child: Text('Сервер не отвечает!'),
                                       ));
                                 }
                                 //получаем данные о характеристиках
-                                Map<String, dynamic> cChars =
+                                final Map<String, dynamic> cChars =
                                     snapshot.data as Map<String, dynamic>;
-                                List<String> urls = [];
+                                final List<String> urls = <String>[];
                                 for (int i = 0;
                                     i <
                                         (cChars['images_urls'] as List<String>)
                                             .length;
                                     i++) {
-                                  urls.add("http://" +
-                                      cChars["images_urls"][i].toString());
+                                  urls.add('http://' +
+                                      cChars['images_urls'][i].toString());
                                 }
                                 //получаем ссылку на автомобиль
-                                String url = snap.data?[index] as String;
+                                final String url = snap.data?[index] as String;
                                 //такая же стиуация как с карточками, может быть два варианта
                                 //1. Подержаная
-                                if (!url.contains("/new/")) {
+                                if (!url.contains('/new/')) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                      color: (provider.isDarkMode
+                                      color: provider.isDarkMode
                                           ? Colors.black
-                                          : Colors.white),
-                                      boxShadow: [
+                                          : Colors.white,
+                                      boxShadow: <BoxShadow>[
                                         BoxShadow(
                                           color: Colors.blueAccent
                                               .withOpacity(0.3),
                                           spreadRadius: 1,
                                           blurRadius: 2,
-                                          offset: Offset(0, 3),
+                                          offset: const Offset(0, 3),
                                         ),
                                       ],
                                       borderRadius: BorderRadius.circular(10),
@@ -194,27 +197,30 @@ class _FavoriteState extends State<Favorite> {
                                     width: MediaQuery.of(context).size.width,
                                     height: MediaQuery.of(context).size.height *
                                         0.15,
-                                    margin: EdgeInsets.symmetric(vertical: 5),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
                                     child: InkWell(
-                                      onTap: () => {
+                                      onTap: () => <void>{
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CarPage(carUrl: url)))
+                                            MaterialPageRoute<dynamic>(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        CarPage(carUrl: url)))
                                       },
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: [
+                                          children: <Widget>[
                                             Expanded(
                                               flex: 25,
                                               child: InkWell(
-                                                onTap: () => {
+                                                onTap: () => <void>{
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
+                                                    MaterialPageRoute<dynamic>(
+                                                      builder: (BuildContext
+                                                              context) =>
                                                           CarouselPage(
                                                               imageUrls: urls),
                                                     ),
@@ -223,8 +229,8 @@ class _FavoriteState extends State<Favorite> {
                                                 child: Container(
                                                   child: Image(
                                                     image: NetworkImage(
-                                                        "http://" +
-                                                            cChars["images_urls"]
+                                                        'http://' +
+                                                            cChars['images_urls']
                                                                     [0]
                                                                 .toString()),
                                                   ),
@@ -236,27 +242,24 @@ class _FavoriteState extends State<Favorite> {
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: [
+                                                children: <Widget>[
                                                   Container(
-                                                    child: Text(cChars["name"]
+                                                    child: Text(cChars['name']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                   Container(
-                                                    child: Text(cChars["kmage"]
+                                                    child: Text(cChars['kmage']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                   Container(
-                                                    child: Text(cChars["engine"]
+                                                    child: Text(cChars['engine']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                 ],
                                               ),
@@ -266,27 +269,25 @@ class _FavoriteState extends State<Favorite> {
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: [
+                                                children: <Widget>[
                                                   Container(
                                                       child: Text(
-                                                          cChars["price"]
+                                                          cChars['price']
                                                               .toString()),
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 3)),
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 3)),
                                                   Container(
-                                                    child: Text(cChars["color"]
+                                                    child: Text(cChars['color']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                   Container(
-                                                    child: Text(cChars["drive"]
+                                                    child: Text(cChars['drive']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                 ],
                                               ),
@@ -295,28 +296,30 @@ class _FavoriteState extends State<Favorite> {
                                               flex: 8,
                                               child: IconButton(
                                                 iconSize: 35,
-                                                icon:
-                                                    Icon(CupertinoIcons.clear),
+                                                icon: const Icon(
+                                                    CupertinoIcons.clear),
                                                 onPressed: () async {
-                                                  var docsPath =
+                                                  final Directory docsPath =
                                                       await getApplicationDocumentsDirectory();
-                                                  var db = await openDatabase(
-                                                      docsPath.path +
-                                                          'autofavs.db',
-                                                      version: 1,
-                                                      onCreate: (Database db,
-                                                          int version) async {
+                                                  final Database db =
+                                                      await openDatabase(
+                                                          docsPath.path +
+                                                              'autofavs.db',
+                                                          version: 1,
+                                                          onCreate: (Database
+                                                                  db,
+                                                              int version) async {
                                                     await db.execute(
-                                                        "CREATE TABLE Favs ("
-                                                        "url TEXT"
-                                                        ")");
+                                                        'CREATE TABLE Favs ('
+                                                        'url TEXT'
+                                                        ')');
                                                   });
-                                                  db.delete("Favs",
-                                                      where: "url = ?",
-                                                      whereArgs: [url]);
-                                                  print("del");
+                                                  db.delete('Favs',
+                                                      where: 'url = ?',
+                                                      whereArgs: <String>[url]);
+                                                  print('del');
                                                   //обновление страницы
-                                                  this.setState(() {});
+                                                  setState(() {});
                                                 },
                                               ),
                                             ),
@@ -328,13 +331,13 @@ class _FavoriteState extends State<Favorite> {
                                   return Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      boxShadow: [
+                                      boxShadow: <BoxShadow>[
                                         BoxShadow(
                                           color: Colors.blueAccent
                                               .withOpacity(0.3),
                                           spreadRadius: 1,
                                           blurRadius: 2,
-                                          offset: Offset(0, 3),
+                                          offset: const Offset(0, 3),
                                         ),
                                       ],
                                       borderRadius: BorderRadius.circular(10),
@@ -347,27 +350,30 @@ class _FavoriteState extends State<Favorite> {
                                     width: MediaQuery.of(context).size.width,
                                     height: MediaQuery.of(context).size.height *
                                         0.15,
-                                    margin: EdgeInsets.symmetric(vertical: 5),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
                                     child: InkWell(
-                                      onTap: () => {
+                                      onTap: () => <void>{
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CarPage(carUrl: url)))
+                                            MaterialPageRoute<dynamic>(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        CarPage(carUrl: url)))
                                       },
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: [
+                                          children: <Widget>[
                                             Expanded(
                                               flex: 25,
                                               child: InkWell(
-                                                onTap: () => {
+                                                onTap: () => <void>{
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
+                                                    MaterialPageRoute<dynamic>(
+                                                      builder: (BuildContext
+                                                              context) =>
                                                           CarouselPage(
                                                               imageUrls: urls),
                                                     ),
@@ -376,8 +382,8 @@ class _FavoriteState extends State<Favorite> {
                                                 child: Container(
                                                   child: Image(
                                                     image: NetworkImage(
-                                                        "http://" +
-                                                            cChars["images_urls"]
+                                                        'http://' +
+                                                            cChars['images_urls']
                                                                     [0]
                                                                 .toString()),
                                                   ),
@@ -389,29 +395,28 @@ class _FavoriteState extends State<Favorite> {
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: [
+                                                children: <Widget>[
                                                   Container(
-                                                    child: Text(cChars["name"]
+                                                    child: Text(cChars['name']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                   Container(
                                                     child: Text(
-                                                        cChars["complectation"]
+                                                        cChars['complectation']
                                                             .toString()),
-                                                    margin: EdgeInsets.only(
-                                                        top: 3,
-                                                        bottom: 3,
-                                                        left: 2),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 3,
+                                                            bottom: 3,
+                                                            left: 2),
                                                   ),
                                                   Container(
-                                                    child: Text(cChars["engine"]
+                                                    child: Text(cChars['engine']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                 ],
                                               ),
@@ -421,27 +426,25 @@ class _FavoriteState extends State<Favorite> {
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: [
+                                                children: <Widget>[
                                                   Container(
                                                       child: Text(
-                                                          cChars["price"]
+                                                          cChars['price']
                                                               .toString()),
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 3)),
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 3)),
                                                   Container(
-                                                    child: Text(cChars["color"]
+                                                    child: Text(cChars['color']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                   Container(
-                                                    child: Text(cChars["drive"]
+                                                    child: Text(cChars['drive']
                                                         .toString()),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 3),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(vertical: 3),
                                                   ),
                                                 ],
                                               ),
@@ -450,28 +453,30 @@ class _FavoriteState extends State<Favorite> {
                                               flex: 8,
                                               child: IconButton(
                                                 iconSize: 35,
-                                                icon:
-                                                    Icon(CupertinoIcons.clear),
+                                                icon: const Icon(
+                                                    CupertinoIcons.clear),
                                                 onPressed: () async {
-                                                  var docsPath =
+                                                  final Directory docsPath =
                                                       await getApplicationDocumentsDirectory();
-                                                  var db = await openDatabase(
-                                                      docsPath.path +
-                                                          'autofavs.db',
-                                                      version: 1,
-                                                      onCreate: (Database db,
-                                                          int version) async {
+                                                  final Database db =
+                                                      await openDatabase(
+                                                          docsPath.path +
+                                                              'autofavs.db',
+                                                          version: 1,
+                                                          onCreate: (Database
+                                                                  db,
+                                                              int version) async {
                                                     await db.execute(
-                                                        "CREATE TABLE Favs ("
-                                                        "url TEXT"
-                                                        ")");
+                                                        'CREATE TABLE Favs ('
+                                                        'url TEXT'
+                                                        ')');
                                                   });
-                                                  db.delete("Favs",
-                                                      where: "url = ?",
-                                                      whereArgs: [url]);
-                                                  print("del");
+                                                  db.delete('Favs',
+                                                      where: 'url = ?',
+                                                      whereArgs: <String>[url]);
+                                                  print('del');
                                                   //обновление страницы
-                                                  this.setState(() {});
+                                                  setState(() {});
                                                 },
                                               ),
                                             ),
@@ -493,21 +498,21 @@ class _FavoriteState extends State<Favorite> {
 }
 
 //получаем параметры карточки
-Future<Map<String, dynamic>> getCardParameters(carUrl) async {
+Future<Map<String, dynamic>> getCardParameters(String carUrl) async {
   print(carUrl);
-  var url = Uri.parse("https://autoparseru.herokuapp.com/getCardByUrl");
-  var body = json.encode({"url": carUrl});
-  var res = await http.post(url, body: body, headers: headers);
+  final Uri url = Uri.parse('https://autoparseru.herokuapp.com/getCardByUrl');
+  final String body = json.encode(<String, dynamic>{'url': carUrl});
+  final http.Response res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {
-    Map<String, dynamic> jsonRes =
+    final Map<String, dynamic> jsonRes =
         json.decode(res.body) as Map<String, dynamic>;
     return jsonRes;
   } else {
-    return Map<String, dynamic>();
+    return <String, dynamic>{};
   }
 }
 
-Map<String, String> headers = {
+Map<String, String> headers = <String, String>{
   'Content-type': 'application/json',
   'Accept': 'application/json; charset=UTF-8',
 };

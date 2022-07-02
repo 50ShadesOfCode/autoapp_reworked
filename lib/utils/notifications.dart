@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:http/http.dart' as http;
 
 //плагин для получения доступа к уведомлениям
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -15,8 +15,8 @@ Future<void> repeatNotificationHourly() async {
       AndroidNotificationDetails('123', 'Auto App');
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
-  var prefs = await SharedPreferences.getInstance();
-  String url = prefs.getString("noturl") as String;
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String url = prefs.getString('noturl') as String;
   await flutterLocalNotificationsPlugin.periodicallyShow(0, 'Auto App',
       await _getNotsText(url), RepeatInterval.hourly, platformChannelSpecifics,
       androidAllowWhileIdle: true);
@@ -28,8 +28,8 @@ Future<void> repeatNotification() async {
       AndroidNotificationDetails('123', 'Auto App');
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
-  var prefs = await SharedPreferences.getInstance();
-  String url = prefs.getString("noturl") as String;
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String url = prefs.getString('noturl') as String;
   await flutterLocalNotificationsPlugin.periodicallyShow(
       0,
       'Auto App',
@@ -41,16 +41,15 @@ Future<void> repeatNotification() async {
 
 //планирует уведомление на 16.00 следующего дня
 Future<void> scheduleDailyFourAMNotification() async {
-  var prefs = await SharedPreferences.getInstance();
-  String url = prefs.getString("noturl") as String;
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String url = prefs.getString('noturl') as String;
   await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'Auto App',
       await _getNotsText(url),
       _nextInstanceOfFourAM(),
       const NotificationDetails(
-        android:
-            AndroidNotificationDetails('123', 'Auto App'),
+        android: AndroidNotificationDetails('123', 'Auto App'),
       ),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
@@ -61,16 +60,15 @@ Future<void> scheduleDailyFourAMNotification() async {
 
 //планирует уведомления каждые 45 минут
 Future<void> schedule45MinNotification() async {
-  var prefs = await SharedPreferences.getInstance();
-  String url = prefs.getString("noturl") as String;
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String url = prefs.getString('noturl') as String;
   await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'Auto App',
       await _getNotsText(url),
       _nextInstanceOf45Min(),
       const NotificationDetails(
-        android:
-            AndroidNotificationDetails('123', 'Auto App'),
+        android: AndroidNotificationDetails('123', 'Auto App'),
       ),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
@@ -108,21 +106,21 @@ tz.TZDateTime _nextInstanceOfFourAM() {
 
 //получает количество автомобилей по заданным характеристикам с сервера, сравнивает с сохраненным и в зависимости от сравнения выдает текст уведомления
 Future<String> _getNotsText(String url) async {
-  var res = await http.post(
+  final http.Response res = await http.post(
     Uri.parse('https://autoparseru.herokuapp.com/getNotUpdate'),
-    body: json.encode({"url": url}),
+    body: json.encode(<String, dynamic>{'url': url}),
     headers: headers,
   );
-  var prefs = await SharedPreferences.getInstance();
-  if (res.body == prefs.getString("carups")) {
-    return "Новых поступлений нет!";
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (res.body == prefs.getString('carups')) {
+    return 'Новых поступлений нет!';
   } else {
-    return "Новые поступления по вашим параметрам!";
+    return 'Новые поступления по вашим параметрам!';
   }
 }
 
 //заголовки для запроса, одинаковые в каждом файле
-Map<String, String> headers = {
+Map<String, String> headers = <String, String>{
   'Content-type': 'application/json',
   'Accept': 'application/json; charset=UTF-8',
 };

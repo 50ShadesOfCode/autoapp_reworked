@@ -17,7 +17,7 @@ class NotificationService {
   Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
@@ -25,5 +25,5 @@ class NotificationService {
   }
 
   //выполняется при нажатии на уведомление. По умолчанию открывает приложение
-  Future selectNotification(String? payload) async {}
+  Future<void> selectNotification(String? payload) async {}
 }
