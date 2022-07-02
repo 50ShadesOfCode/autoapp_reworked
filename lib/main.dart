@@ -12,8 +12,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'components/home_page.dart';
 import 'components/theme_provider.dart';
 
-//Получает и настраивает время для приложения в соответствии с местным
-//Используется для корректной отправки уведомлений
+///Получает и настраивает время для приложения в соответствии с местным
+///Используется для корректной отправки уведомлений
 Future<void> _configureLocalTimeZone() async {
   tz.initializeTimeZones();
   final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
@@ -21,14 +21,15 @@ Future<void> _configureLocalTimeZone() async {
 }
 
 Future<void> main() async {
-  //до того как не выполнится эта функция, другие выполняться не будут
-  //используется для корректного вызова каких-либо функций при старте приложения
+  ///до того как не выполнится эта функция, другие выполняться не будут
+  ///используется для корректного вызова каких-либо функций при старте приложения
   WidgetsFlutterBinding.ensureInitialized();
 
   await _configureLocalTimeZone();
   await NotificationService().init();
   final int? rate = await getRate();
-  //устанавливает частоту уведомлений
+
+  ///устанавливает частоту уведомлений
   if (rate == 0) {
     cancelAllNotifications();
   } else if (rate == 1) {
@@ -39,8 +40,8 @@ Future<void> main() async {
     scheduleDailyFourAMNotification();
   }
 
-  //главная функция в приложении, в которой оно само и запускается
-  //ChangeNotifier следит за какими либо изменениями, в нашем случае это изменение темы
+  ///главная функция в приложении, в которой оно само и запускается
+  ///ChangeNotifier следит за какими либо изменениями, в нашем случае это изменение темы
   runApp(
     ChangeNotifierProvider<ThemeProvider>(
       create: (BuildContext context) => ThemeProvider(),
@@ -58,13 +59,13 @@ Future<void> main() async {
   );
 }
 
-//Получает частоту уведомлений, сохраненных
+///Получает частоту уведомлений, сохраненных
 Future<int?> getRate() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getInt('rate');
 }
 
-//Виджет, отвечающий за приветствие в приложении, то что мы видим в начале
+///Виджет, отвечающий за приветствие в приложении, то что мы видим в начале
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
   final Color backgroundColor = Colors.white;
@@ -75,15 +76,15 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-//получает имя пользователя из SharedPreferences
+///получает имя пользователя из SharedPreferences
 Future<String?> getUsername() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString('username');
 }
 
-//реализация состояния класса экрана приветствия
+///реализация состояния класса экрана приветствия
 class _SplashScreenState extends State<SplashScreen> {
-  //время экрана приветствия
+  ///время экрана приветствия
   final int splashDelay = 3;
 
   @override
@@ -93,18 +94,16 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadWidget();
   }
 
-  //по прошествии экрана приветствия, переходит на другую страницу
+  ///по прошествии экрана приветствия, переходит на другую страницу
   Future<Timer> _loadWidget() async {
     final Duration _duration = Duration(seconds: splashDelay);
-    return Timer(_duration, navigationPage);
-  }
-
-  //сама функция перехода на другую страницу
-  void navigationPage() {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute<dynamic>(
-            builder: (BuildContext context) => HomePage()));
+    return Timer(
+      _duration,
+      () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => HomePage())),
+    );
   }
 
   @override

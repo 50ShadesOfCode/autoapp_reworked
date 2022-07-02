@@ -13,7 +13,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
-//класс с двумя полями: светлая и темная тема, используется только для удобного доступа
+///класс с двумя полями: светлая и темная тема, используется только для удобного доступа
 class Themes {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,

@@ -14,7 +14,7 @@ String favmodelToJson(FavModel data) {
 }
 
 class FavModel {
-  //ссылка на автомобиль
+  ///ссылка на автомобиль
   String url;
 
   FavModel({
