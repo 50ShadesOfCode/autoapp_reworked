@@ -36,6 +36,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder<Map<String, dynamic>>(
         future: getCardParameters(cardUrl),
         builder: (BuildContext context,
