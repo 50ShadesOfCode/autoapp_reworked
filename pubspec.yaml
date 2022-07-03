@@ -12,6 +12,19 @@ dependencies:
   flutter:
     sdk: flutter
 
+  core:
+    path: core
+  
+  core_ui:
+    path: core_ui
+
+  data:
+    path: data
+
+  domain:
+    path: domain
+
+  get_it: ^7.2.0
   cupertino_icons: ^1.0.5
   favorite_button: ^0.0.4
   persistent_bottom_nav_bar: ^4.0.2
