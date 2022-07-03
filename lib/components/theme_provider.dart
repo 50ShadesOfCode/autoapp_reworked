@@ -12,6 +12,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+<<<<<<< HEAD
 
 ///класс с двумя полями: светлая и темная тема, используется только для удобного доступа
 class Themes {
@@ -70,3 +71,5 @@ class Themes {
     ),
   );
 }
+=======
+>>>>>>> 373f665 (Start making clean arch.)
