@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 //TODO: Errors with no notification parameters
+//TODO: Add default notifications
 
 ///плагин для получения доступа к уведомлениям
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
