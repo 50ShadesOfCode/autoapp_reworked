@@ -1,4 +1,4 @@
-import 'package:auto_app/components/car_list_page.dart';
+import 'package:auto_app/features/common/car_list_page.dart';
 import 'package:auto_app/utils/url_maker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

@@ -1,7 +1,7 @@
-import 'package:auto_app/components/favorite.dart';
-import 'package:auto_app/components/search.dart';
-import 'package:auto_app/components/settings.dart';
 import 'package:auto_app/components/theme_provider.dart';
+import 'package:auto_app/features/favourite/favorite.dart';
+import 'package:auto_app/features/search/search.dart';
+import 'package:auto_app/features/settings/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';

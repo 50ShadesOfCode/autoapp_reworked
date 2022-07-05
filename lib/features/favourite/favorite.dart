@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_app/components/theme_provider.dart';
+import 'package:auto_app/features/common/car_page.dart';
+import 'package:auto_app/features/favourite/ui/carousel_page.dart';
 import 'package:auto_app/utils/config.dart';
 import 'package:auto_app/utils/favourite.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,9 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'car_page.dart';
-import 'carousel_page.dart';
 
 //функция, которая возвращает список ссылок на автомобили, хранящиеся в бд
 Future<List<String>> buildList() async {

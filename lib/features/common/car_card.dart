@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_app/components/car_page.dart';
 import 'package:auto_app/components/theme_provider.dart';
+import 'package:auto_app/features/common/car_page.dart';
+import 'package:auto_app/features/common/carousel_page.dart';
 import 'package:auto_app/utils/config.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'carousel_page.dart';
 
 class CarCard extends StatefulWidget {
   final String cardUrl;
