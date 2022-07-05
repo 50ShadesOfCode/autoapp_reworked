@@ -1,4 +1,4 @@
-import 'package:auto_app/components/theme_provider.dart';
+import 'package:core_ui/src/theme_provider.dart';
 import 'package:auto_app/features/favourite/favorite.dart';
 import 'package:auto_app/features/search/search.dart';
 import 'package:auto_app/features/settings/settings.dart';

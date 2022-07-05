@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_app/components/theme_provider.dart';
+import 'package:core_ui/src/theme_provider.dart';
 import 'package:auto_app/features/common/car_page.dart';
 import 'package:auto_app/features/common/carousel_page.dart';
 import 'package:auto_app/utils/config.dart';
