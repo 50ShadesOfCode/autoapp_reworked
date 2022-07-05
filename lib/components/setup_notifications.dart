@@ -405,7 +405,7 @@ class _NotiChars extends State<NotiChars> {
                           //выполняет запрос на сервер для получения числа автомобилей
                           final http.Response res = await http.post(
                             Uri.parse(
-                                'https://autoparseru.herokuapp.com/getNotUpdate'),
+                                'https://fpmiautoparser.herokuapp.com/getNotUpdate'),
                             body: json.encode(<String, dynamic>{'url': url}),
                             headers: headers,
                           );

@@ -12,7 +12,7 @@ List<String> cards = <String>[];
 Future<int> _getCarUrls(String purl) async {
   print(purl);
   final Uri url =
-      Uri.parse('https://autoparseru.herokuapp.com/getCarsByParams');
+      Uri.parse('https://fpmiautoparser.herokuapp.com/getCarsByParams');
   final String body = json.encode(<String, dynamic>{'url': purl});
   final http.Response res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {

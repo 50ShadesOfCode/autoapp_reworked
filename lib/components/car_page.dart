@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 //получаем словарь с параметрами автомобиля таким же образом, как и в других функциях
 Future<Map<String, dynamic>> getCarParameters(String carUrl) async {
-  final Uri url = Uri.parse('https://autoparseru.herokuapp.com/getCarByUrl');
+  final Uri url = Uri.parse('https://fpmiautoparser.herokuapp.com/getCarByUrl');
   final String body = json.encode(<String, dynamic>{'url': carUrl});
   final http.Response res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {
