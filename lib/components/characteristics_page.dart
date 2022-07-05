@@ -76,7 +76,7 @@ class _CharsPageState extends State<CharsPage> {
 //ответ с сервера приходит в виде название:характеристика, поэтому нужен обычный словарь
 Future<Map<String, dynamic>> _getParams(String url) async {
   final http.Response res = await http.post(
-    Uri.parse('https://autoparseru.herokuapp.com/getCharsByUrl'),
+    Uri.parse('https://fpmiautoparser.herokuapp.com/getCharsByUrl'),
     body: json.encode(<String, dynamic>{'url': url}),
     headers: headers,
   );

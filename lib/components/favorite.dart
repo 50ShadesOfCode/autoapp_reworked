@@ -501,7 +501,8 @@ class _FavoriteState extends State<Favorite> {
 //получаем параметры карточки
 Future<Map<String, dynamic>> getCardParameters(String carUrl) async {
   print(carUrl);
-  final Uri url = Uri.parse('https://autoparseru.herokuapp.com/getCardByUrl');
+  final Uri url =
+      Uri.parse('https://fpmiautoparser.herokuapp.com/getCardByUrl');
   final String body = json.encode(<String, dynamic>{'url': carUrl});
   final http.Response res = await http.post(url, body: body, headers: headers);
   if (res.statusCode == 200) {

@@ -108,7 +108,7 @@ tz.TZDateTime _nextInstanceOfFourAM() {
 ///получает количество автомобилей по заданным характеристикам с сервера, сравнивает с сохраненным и в зависимости от сравнения выдает текст уведомления
 Future<String> _getNotsText(String url) async {
   final http.Response res = await http.post(
-    Uri.parse('https://autoparseru.herokuapp.com/getNotUpdate'),
+    Uri.parse('https://fpmiautoparser.herokuapp.com/getNotUpdate'),
     body: json.encode(<String, dynamic>{'url': url}),
     headers: headers,
   );

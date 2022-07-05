@@ -392,7 +392,8 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
 //получает параметры о автомобиле по заданной ссылке
 Future<Map<String, dynamic>> getCardParameters(String carUrl) async {
   print(carUrl);
-  final Uri url = Uri.parse('https://autoparseru.herokuapp.com/getCardByUrl');
+  final Uri url =
+      Uri.parse('https://fpmiautoparser.herokuapp.com/getCardByUrl');
   //тело запроса
   final String body = json.encode(<String, dynamic>{'url': carUrl});
   //сам запрос
