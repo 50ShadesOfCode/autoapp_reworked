@@ -67,6 +67,16 @@ class _FavoriteState extends State<Favorite> {
       body: FutureBuilder<List<String>>(
           future: buildList(),
           builder: (BuildContext context, AsyncSnapshot<List<String>> snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snap.data!.isEmpty &&
+                snap.connectionState == ConnectionState.done) {
+              return const Center(
+                child: Text('Пока еще ничего нет!'),
+              );
+            }
             return Container(
               margin: const EdgeInsets.all(5),
               child: Column(

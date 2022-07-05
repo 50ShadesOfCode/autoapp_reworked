@@ -46,9 +46,9 @@ class HomePageState extends State<HomePage> {
 //список экранов для нижней панели
 List<Widget> _buildScreens() {
   return <Widget>[
-    Settings(),
-    Search(),
     Favorite(),
+    Search(),
+    Settings(),
   ];
 }
 
@@ -56,8 +56,8 @@ List<Widget> _buildScreens() {
 List<PersistentBottomNavBarItem> _navbarsItems() {
   return <PersistentBottomNavBarItem>[
     PersistentBottomNavBarItem(
-      icon: const Icon(CupertinoIcons.settings_solid),
-      title: 'Настройки',
+      icon: const Icon(CupertinoIcons.bookmark),
+      title: 'Избранное',
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
@@ -68,8 +68,8 @@ List<PersistentBottomNavBarItem> _navbarsItems() {
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(CupertinoIcons.bookmark),
-      title: 'Избранное',
+      icon: const Icon(CupertinoIcons.settings_solid),
+      title: 'Настройки',
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
