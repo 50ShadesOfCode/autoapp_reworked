@@ -30,8 +30,10 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         title: const Text('Настройки'),
       ),
-      body: Center(
+      body: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             //форма для введения имени пользователя
             Container(
@@ -42,8 +44,8 @@ class _SettingsState extends State<Settings> {
                     child: Expanded(
                       flex: 75,
                       child: TextField(
-                        decoration: const InputDecoration(
-                            hintText: 'Введите имя пользователя'),
+                        decoration:
+                            const InputDecoration(hintText: 'Имя пользователя'),
                         controller: _textController,
                       ),
                     ),
@@ -76,7 +78,7 @@ class _SettingsState extends State<Settings> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('Сменить тему'),
+                    const Text('Темная тема'),
                     ChangeThemeButtonWidget(),
                   ],
                 ),
@@ -84,104 +86,106 @@ class _SettingsState extends State<Settings> {
             ),
             //выпадающий список с частотами уведомлений
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              child: DropdownButton<int>(
-                  hint: const Text('Выберите частоту уведомлений'),
-                  value: selectedRate,
-                  //при выборе какого либо элемента сохраняет частоту в SharedPreferences и запускает уведомления с выбранной частотой
-                  onChanged: (int? value) async {
-                    setState(() {
-                      selectedRate = value as int;
-                    });
-                    print(value);
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setInt('rate', value as int);
-                    cancelAllNotifications();
-                    if (value == 1) {
-                      schedule45MinNotification();
-                    }
-                    if (value == 2) {
-                      repeatNotificationHourly();
-                    }
-                    if (value == 3) {
-                      scheduleDailyFourAMNotification();
-                    }
-                  },
-                  //список частот уведомлений
-                  items: <DropdownMenuItem<int>>[
-                    DropdownMenuItem<int>(
-                      value: 0,
-                      child: Row(
-                        children: const <Widget>[
-                          SizedBox(
-                            width: 10,
+              child: Column(children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  child: DropdownButton<int>(
+                      hint: const Text('Выберите частоту уведомлений'),
+                      value: selectedRate,
+                      //при выборе какого либо элемента сохраняет частоту в SharedPreferences и запускает уведомления с выбранной частотой
+                      onChanged: (int? value) async {
+                        setState(() {
+                          selectedRate = value as int;
+                        });
+                        print(value);
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setInt('rate', value as int);
+                        cancelAllNotifications();
+                        if (value == 1) {
+                          schedule45MinNotification();
+                        }
+                        if (value == 2) {
+                          repeatNotificationHourly();
+                        }
+                        if (value == 3) {
+                          scheduleDailyFourAMNotification();
+                        }
+                      },
+                      //список частот уведомлений
+                      items: <DropdownMenuItem<int>>[
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Не показывать уведомления',
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Не показывать уведомления',
-                            style: TextStyle(color: Colors.black),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Показывать каждые 45 минут',
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 1,
-                      child: Row(
-                        children: const <Widget>[
-                          SizedBox(
-                            width: 10,
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 2,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Показывать каждый час',
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Показывать каждые 45 минут',
-                            style: TextStyle(color: Colors.black),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 3,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Показывать ежедневно',
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 2,
-                      child: Row(
-                        children: const <Widget>[
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Показывать каждый час',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 3,
-                      child: Row(
-                        children: const <Widget>[
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Показывать ежедневно',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    )
-                  ]),
+                        )
+                      ]),
+                ),
+                //кнопка для перехода на страницу с параметрами уведомлений
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextButton(
+                    onPressed: () => <void>{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (BuildContext context) => NotiChars(),
+                        ),
+                      )
+                    },
+                    child: const Text('Изменить параметры уведомлений'),
+                  ),
+                ),
+              ]),
             ),
-            //кнопка для перехода на страницу с параметрами уведомлений
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              child: TextButton(
-                onPressed: () => <void>{
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => NotiChars()),
-                  )
-                },
-                child: const Text('Изменить параметры уведомлений'),
-              ),
-            ),
+
             //поле для ввода сообщения обратной связи. при нажатии на отправить открывается почта уже с введенной темой текстом и тд
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -198,22 +202,22 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                   Expanded(
-                      flex: 30,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            if (_textControllerMail.text == '') {
-                              return;
-                            }
-                            final Email email = Email(
-                                body: _textControllerMail.text,
-                                subject: 'Обратная связь в приложении',
-                                recipients: <String>[
-                                  'kaktysh20040130@gmail.com'
-                                ],
-                                isHTML: false);
-                            await FlutterEmailSender.send(email);
-                          },
-                          child: const Text('Отправить')))
+                    flex: 30,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_textControllerMail.text == '') {
+                          return;
+                        }
+                        final Email email = Email(
+                            body: _textControllerMail.text,
+                            subject: 'Обратная связь в приложении',
+                            recipients: <String>['kaktymail@gmail.com'],
+                            isHTML: false);
+                        await FlutterEmailSender.send(email);
+                      },
+                      child: const Text('Отправить'),
+                    ),
+                  )
                 ],
               ),
             )
