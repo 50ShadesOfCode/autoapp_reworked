@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_app/components/theme_provider.dart';
+import 'package:core_ui/src/theme_provider.dart';
 import 'package:auto_app/features/common/car_page.dart';
-import 'package:auto_app/features/favourite/ui/carousel_page.dart';
+import 'package:auto_app/features/common/carousel_page.dart';
 import 'package:auto_app/utils/config.dart';
-import 'package:auto_app/utils/favourite.dart';
+import 'package:domain/entities/favourite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
