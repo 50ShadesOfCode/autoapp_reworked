@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:auto_app/components/splashscreen.dart';
-import 'package:auto_app/components/theme_provider.dart';
+import 'package:core_ui/src/theme_provider.dart';
+import 'package:auto_app/features/splashcreen/splashscreen.dart';
 import 'package:auto_app/utils/notification_service.dart';
 import 'package:auto_app/utils/notifications.dart';
 import 'package:core_ui/core_ui.dart';

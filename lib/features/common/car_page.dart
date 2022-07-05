@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:auto_app/components/carousel.dart';
-import 'package:auto_app/components/characteristics_page.dart';
+import 'package:auto_app/features/common/carousel.dart';
+import 'package:auto_app/features/common/characteristics_page.dart';
 import 'package:auto_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
