@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:core_ui/src/theme_provider.dart';
 import 'package:auto_app/features/common/car_page.dart';
 import 'package:auto_app/features/common/carousel_page.dart';
 import 'package:auto_app/utils/config.dart';
+import 'package:core_ui/src/theme_provider.dart';
 import 'package:domain/entities/favourite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'car_page.dart';
-import 'carousel_page.dart';
 
 //TODO: favs in search
 
