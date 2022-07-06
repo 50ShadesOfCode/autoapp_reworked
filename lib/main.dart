@@ -27,7 +27,8 @@ Future<void> main() async {
 
   await _configureLocalTimeZone();
   await NotificationService().init();
-  final int? rate = await getRate();
+  int? rate = await getRate();
+  rate ??= 2;
 
   ///устанавливает частоту уведомлений
   if (rate == 0) {

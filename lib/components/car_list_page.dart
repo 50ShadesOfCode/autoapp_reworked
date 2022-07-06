@@ -8,6 +8,8 @@ import 'car_card.dart';
 
 List<String> cards = <String>[];
 
+//TODO: Пизда нихуя не работает
+
 //получает с сервера список ссылок на автомобили по ссылке с заданными параметрами
 Future<int> _getCarUrls(String purl) async {
   print(purl);
@@ -15,13 +17,17 @@ Future<int> _getCarUrls(String purl) async {
       Uri.parse('https://fpmiautoparser.herokuapp.com/getCarsByParams');
   final String body = json.encode(<String, dynamic>{'url': purl});
   final http.Response res = await http.post(url, body: body, headers: headers);
+  print(res.statusCode);
   if (res.statusCode == 200) {
     //создаем список ссылок на картинки на основе массива в ответе сервера
     final Map<String, dynamic> jsonRes =
         json.decode(res.body) as Map<String, dynamic>;
-    for (int i = 0; i < (jsonRes['urls'] as List<String>).length; i++) {
+    print('ok');
+    for (int i = 0; i < (jsonRes['urls'].length as int); i++) {
       cards.add(jsonRes['urls'][i].toString());
     }
+    print('ok');
+    print(cards[0]);
     return 200;
   }
   return 404;
@@ -44,6 +50,11 @@ class _CarListPageState extends State<CarListPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +64,11 @@ class _CarListPageState extends State<CarListPage> {
       body: FutureBuilder<int>(
         future: _getCarUrls(url),
         builder: (BuildContext context, AsyncSnapshot<int> snap) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return Container(
             margin: const EdgeInsets.all(5),
             child: Column(

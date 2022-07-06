@@ -100,10 +100,8 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
           final Map<String, dynamic> cChars =
               snapshot.data as Map<String, dynamic>;
           final List<String> urls = <String>[];
-          for (int i = 0;
-              i < (cChars['images_urls'] as List<String>).length;
-              i++) {
-            urls.add('http://' + (cChars['images_urls'] as List<String>)[i]);
+          for (int i = 0; i < (cChars['images_urls'].length as int); i++) {
+            urls.add('http://' + (cChars['images_urls'][i] as String));
           }
           //если на подержаный, то возвращаем карточку для подержаного
           if (!cardUrl.contains('/new/')) {

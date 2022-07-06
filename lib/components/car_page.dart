@@ -72,10 +72,8 @@ class _CarPageState extends State<CarPage> {
           }
           final Map<String, dynamic> cChars = snap.data as Map<String, dynamic>;
           final List<String> urls = <String>[];
-          for (int i = 0;
-              i < (cChars['images_urls'] as List<String>).length;
-              i++) {
-            urls.add((cChars['images_urls'] as List<String>)[i]);
+          for (int i = 0; i < (cChars['images_urls'].length as int); i++) {
+            urls.add(cChars['images_urls'][i] as String);
           }
           //создание идет по такому же принципу как и карточка, только здесь добавляется
           //карусель с картинками, кнопки для характеристик и обратной связи. Также делится

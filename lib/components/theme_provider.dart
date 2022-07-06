@@ -18,7 +18,7 @@ class Themes {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.grey.shade900,
-    colorScheme: const ColorScheme.dark(),
+    //colorScheme: const ColorScheme.dark(),
     textTheme: Typography.whiteCupertino,
     buttonTheme: ButtonThemeData(
       buttonColor: Colors.blue.shade900,
@@ -26,23 +26,43 @@ class Themes {
       splashColor: Colors.blue.shade900,
       focusColor: Colors.blue.shade900,
     ),
+    accentColor: Colors.blue,
+    primaryColor: Colors.blue,
+    appBarTheme: const AppBarTheme(color: Colors.blue),
+    indicatorColor: Colors.blue,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.blue.shade900)),
+        backgroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
     ),
     switchTheme: SwitchThemeData(
       thumbColor: MaterialStateProperty.all(Colors.blue),
       trackColor: MaterialStateProperty.all(Colors.blue.shade300),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
     ),
   );
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
-    colorScheme: const ColorScheme.light(),
+    primaryColor: Colors.blue,
+    appBarTheme: const AppBarTheme(color: Colors.blue),
+    indicatorColor: Colors.blue,
+    accentColor: Colors.blue,
+    //colorScheme: const ColorScheme.light(),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.blue.shade900)),
+        backgroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
     ),
     switchTheme: SwitchThemeData(
       thumbColor: MaterialStateProperty.all(Colors.blue),

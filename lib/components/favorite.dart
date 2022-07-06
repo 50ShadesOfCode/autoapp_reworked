@@ -14,6 +14,8 @@ import 'package:sqflite/sqflite.dart';
 import 'car_page.dart';
 import 'carousel_page.dart';
 
+//TODO: favs in search
+
 //функция, которая возвращает список ссылок на автомобили, хранящиеся в бд
 Future<List<String>> buildList() async {
   //получаем путь к папке "Documents"
@@ -180,10 +182,7 @@ class _FavoriteState extends State<Favorite> {
                                       snapshot.data as Map<String, dynamic>;
                                   final List<String> urls = <String>[];
                                   for (int i = 0;
-                                      i <
-                                          (cChars['images_urls']
-                                                  as List<String>)
-                                              .length;
+                                      i < (cChars['images_urls'].length as int);
                                       i++) {
                                     urls.add('http://' +
                                         cChars['images_urls'][i].toString());
