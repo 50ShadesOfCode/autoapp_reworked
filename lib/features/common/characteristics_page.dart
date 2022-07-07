@@ -12,7 +12,6 @@ class CharsPage extends StatefulWidget {
 }
 
 class _CharsPageState extends State<CharsPage> {
-  //ссылка на автомобиль, есть в каждом объекте классов карточек, страниц автомобилей, характеристик
   late final String url;
 
   @override
@@ -24,52 +23,53 @@ class _CharsPageState extends State<CharsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Характеристики'),
-          automaticallyImplyLeading: true,
-        ),
-        body: FutureBuilder<Map<String, dynamic>>(
-          future: _getParams(url),
-          builder:
-              (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snap) {
-            if (snap.connectionState == ConnectionState.waiting) {
-              return Container(
-                child: const Center(
-                  //ожидание
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-            //после получения ответа с сервера строит список по заданным параметрам в виде ключ:значение
-            return Scrollbar(
-              child: ListView.builder(
-                itemCount: snap.data?.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final String key =
-                      (snap.data?.keys.elementAt(index)).toString();
-                  print(snap.data);
-                  //элемент списка с заданным название и параметром
-                  return Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(key),
-                          flex: 50,
-                        ),
-                        Expanded(
-                          flex: 50,
-                          child: Text((snap.data?[key]).toString()),
-                        )
-                      ],
-                    ),
-                  );
-                },
+      appBar: AppBar(
+        title: const Text('Характеристики'),
+        automaticallyImplyLeading: true,
+      ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _getParams(url),
+        builder:
+            (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snap) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return Container(
+              child: const Center(
+                //ожидание
+                child: CircularProgressIndicator(),
               ),
             );
-          },
-        ));
+          }
+          //после получения ответа с сервера строит список по заданным параметрам в виде ключ:значение
+          return Scrollbar(
+            child: ListView.builder(
+              itemCount: snap.data?.length,
+              itemBuilder: (BuildContext context, int index) {
+                final String key =
+                    (snap.data?.keys.elementAt(index)).toString();
+                print(snap.data);
+                //элемент списка с заданным название и параметром
+                return Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(key),
+                        flex: 50,
+                      ),
+                      Expanded(
+                        flex: 50,
+                        child: Text((snap.data?[key]).toString()),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 

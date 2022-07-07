@@ -1,6 +1,6 @@
-import 'package:core_ui/src/theme_provider.dart';
 import 'package:auto_app/features/settings/setup_notifications.dart';
 import 'package:auto_app/utils/notifications.dart';
+import 'package:core_ui/src/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';

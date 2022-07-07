@@ -15,8 +15,14 @@ Future<int> _getCarUrls(String purl) async {
   print(purl);
   final Uri url =
       Uri.parse('https://fpmiautoparser.herokuapp.com/getCarsByParams');
-  final String body = json.encode(<String, dynamic>{'url': purl});
-  final http.Response res = await http.post(url, body: body, headers: headers);
+  final String body = json.encode(<String, dynamic>{
+    'url': purl,
+  });
+  final http.Response res = await http.post(
+    url,
+    body: body,
+    headers: headers,
+  );
   print(res.statusCode);
   if (res.statusCode == 200) {
     //создаем список ссылок на картинки на основе массива в ответе сервера
@@ -24,7 +30,9 @@ Future<int> _getCarUrls(String purl) async {
         json.decode(res.body) as Map<String, dynamic>;
     print('ok');
     for (int i = 0; i < (jsonRes['urls'].length as int); i++) {
-      cards.add(jsonRes['urls'][i].toString());
+      cards.add(
+        jsonRes['urls'][i].toString(),
+      );
     }
     print('ok');
     print(cards[0]);
@@ -63,7 +71,10 @@ class _CarListPageState extends State<CarListPage> {
       //FutureBuilder ждет пока выполнится функция, удобно для нашего случая когда у сервера большое время ответа.
       body: FutureBuilder<int>(
         future: _getCarUrls(url),
-        builder: (BuildContext context, AsyncSnapshot<int> snap) {
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<int> snap,
+        ) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),

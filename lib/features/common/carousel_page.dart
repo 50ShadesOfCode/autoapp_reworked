@@ -52,7 +52,9 @@ class _CarouselPageState extends State<CarouselPage> {
                   width: 8.0,
                   height: 8.0,
                   margin: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 2.0),
+                    vertical: 10.0,
+                    horizontal: 2.0,
+                  ),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _current == index

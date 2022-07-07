@@ -13,7 +13,6 @@ class CarouselWithIndicator extends StatefulWidget {
   }
 }
 
-//создает карусель для показа изображений автомобиля по списку картинкок, которые получают с интернета. Более подробно в документации carousel slider.
 class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
   int _current = 0;
   late final List<String> imageUrls;
@@ -78,21 +77,23 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
   }
 }
 
-//создает список с картинками для показа в карусели
 List<Widget> imageSliders(List<String> iList) {
   return iList
       .map((String item) => Container(
             child: Container(
               margin: const EdgeInsets.all(5.0),
               child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                  child: Stack(
-                    children: <Widget>[
-                      PhotoView(
-                        imageProvider: NetworkImage(item),
-                      ),
-                    ],
-                  )),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    PhotoView(
+                      imageProvider: NetworkImage(item),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ))
       .toList();

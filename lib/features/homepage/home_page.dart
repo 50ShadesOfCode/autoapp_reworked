@@ -1,20 +1,18 @@
-import 'package:core_ui/src/theme_provider.dart';
 import 'package:auto_app/features/favourite/favorite.dart';
 import 'package:auto_app/features/search/search.dart';
 import 'package:auto_app/features/settings/settings.dart';
+import 'package:core_ui/src/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
-//HomePage просто каркас приложения, в котором уже рендерятся все страницы. В себе содержит только нижнюю панель навигации.
 class HomePage extends StatefulWidget {
   @override
-  HomePageState createState() => HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
-  //контроллер для отслеживания состояния нижней панели
+class _HomePageState extends State<HomePage> {
   PersistentTabController _controller = PersistentTabController();
 
   @override
@@ -26,7 +24,6 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final ThemeProvider provider = Provider.of<ThemeProvider>(context);
-    //сама панель с заданными параметрами и темой
     return PersistentTabView(
       context,
       controller: _controller,
@@ -43,7 +40,6 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-//список экранов для нижней панели
 List<Widget> _buildScreens() {
   return <Widget>[
     Favorite(),
@@ -52,7 +48,6 @@ List<Widget> _buildScreens() {
   ];
 }
 
-//элементы панели навигации: настройки, поиск и избранное.
 List<PersistentBottomNavBarItem> _navbarsItems() {
   return <PersistentBottomNavBarItem>[
     PersistentBottomNavBarItem(

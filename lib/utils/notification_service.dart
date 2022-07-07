@@ -18,9 +18,13 @@ class NotificationService {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
     const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: selectNotification,
+    );
     tz.initializeTimeZones();
   }
 

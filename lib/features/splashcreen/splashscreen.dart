@@ -6,11 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 ///Виджет, отвечающий за приветствие в приложении, то что мы видим в начале
 class SplashScreen extends StatefulWidget {
-  static const String routeName = '/';
-  final Color backgroundColor = Colors.white;
-  final TextStyle styleTextUnderTheLoader = const TextStyle(
-      fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black);
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -65,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Image.asset(
-                              'assets/images/car_logo.png',
+                              'assets/icons/app_icon.png',
                               height: 300,
                               width: 300,
                             ),
