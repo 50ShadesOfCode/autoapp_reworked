@@ -27,7 +27,7 @@ dependencies:
   get_it: ^7.2.0
   cupertino_icons: ^1.0.5
   favorite_button: ^0.0.4
-  persistent_bottom_nav_bar: ^4.0.2
+  persistent_bottom_nav_bar_v2: ^4.2.4
   http: ^0.13.4
   carousel_slider: ^4.1.1
   shared_preferences: ^2.0.15
@@ -47,6 +47,14 @@ dev_dependencies:
     sdk: flutter
   
   flutter_lints: ^2.0.1
+  flutter_launcher_icons: ^0.9.3
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path_android: "assets/icons/app_icon.png"
+  image_path_ios: "assets/icons/app_icon.png"
+
 
 flutter:
 
@@ -54,3 +62,19 @@ flutter:
 
   assets:
     - assets/images/car_logo.png
+
+  fonts:
+    - family: SF UI Display
+      fonts:
+        - asset: assets/fonts/sf-ui/SFUIDisplay-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/sf-ui/SFUIDisplay-Semibold.ttf
+          weight: 600
+        - asset: assets/fonts/sf-ui/SFUIDisplay-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/sf-ui/SFUIDisplay-Regular.ttf
+          weight: 400
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Medium.ttf
+          weight: 500

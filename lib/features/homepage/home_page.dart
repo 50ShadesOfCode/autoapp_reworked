@@ -4,7 +4,7 @@ import 'package:auto_app/features/search/search.dart';
 import 'package:auto_app/features/settings/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 //HomePage просто каркас приложения, в котором уже рендерятся все страницы. В себе содержит только нижнюю панель навигации.
