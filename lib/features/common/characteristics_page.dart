@@ -34,39 +34,37 @@ class _CharsPageState extends State<CharsPage> {
           if (snap.connectionState == ConnectionState.waiting) {
             return Container(
               child: const Center(
-                //ожидание
                 child: CircularProgressIndicator(),
               ),
             );
+          } else {
+            return Scrollbar(
+              child: ListView.builder(
+                itemCount: snap.data?.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final String key =
+                      (snap.data?.keys.elementAt(index)).toString();
+                  print(snap.data);
+                  return Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(key),
+                          flex: 50,
+                        ),
+                        Expanded(
+                          flex: 50,
+                          child: Text((snap.data?[key]).toString()),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
           }
-          //после получения ответа с сервера строит список по заданным параметрам в виде ключ:значение
-          return Scrollbar(
-            child: ListView.builder(
-              itemCount: snap.data?.length,
-              itemBuilder: (BuildContext context, int index) {
-                final String key =
-                    (snap.data?.keys.elementAt(index)).toString();
-                print(snap.data);
-                //элемент списка с заданным название и параметром
-                return Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(key),
-                        flex: 50,
-                      ),
-                      Expanded(
-                        flex: 50,
-                        child: Text((snap.data?[key]).toString()),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
         },
       ),
     );

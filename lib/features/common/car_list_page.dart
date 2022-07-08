@@ -11,8 +11,7 @@ List<String> cards = <String>[];
 //TODO: Пизда нихуя не работает
 
 //получает с сервера список ссылок на автомобили по ссылке с заданными параметрами
-Future<int> _getCarUrls(String purl) async {
-  print(purl);
+Future<void> _getCarUrls(String purl) async {
   final Uri url =
       Uri.parse('https://fpmiautoparser.herokuapp.com/getCarsByParams');
   final String body = json.encode(<String, dynamic>{
@@ -23,22 +22,15 @@ Future<int> _getCarUrls(String purl) async {
     body: body,
     headers: headers,
   );
-  print(res.statusCode);
   if (res.statusCode == 200) {
-    //создаем список ссылок на картинки на основе массива в ответе сервера
     final Map<String, dynamic> jsonRes =
         json.decode(res.body) as Map<String, dynamic>;
-    print('ok');
     for (int i = 0; i < (jsonRes['urls'].length as int); i++) {
       cards.add(
         jsonRes['urls'][i].toString(),
       );
     }
-    print('ok');
-    print(cards[0]);
-    return 200;
   }
-  return 404;
 }
 
 class CarListPage extends StatefulWidget {
@@ -68,16 +60,21 @@ class _CarListPageState extends State<CarListPage> {
       appBar: AppBar(
         title: const Text('Результаты'),
       ),
-      //FutureBuilder ждет пока выполнится функция, удобно для нашего случая когда у сервера большое время ответа.
-      body: FutureBuilder<int>(
+      body: FutureBuilder<void>(
         future: _getCarUrls(url),
         builder: (
           BuildContext context,
-          AsyncSnapshot<int> snap,
+          AsyncSnapshot<void> snap,
         ) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
+            );
+          }
+          if (snap.connectionState == ConnectionState.done &&
+              cards == <String>[]) {
+            return const Center(
+              child: Text('Check your internet connection!'),
             );
           }
           return Container(

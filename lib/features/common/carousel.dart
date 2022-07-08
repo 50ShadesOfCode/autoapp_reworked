@@ -8,9 +8,7 @@ class CarouselWithIndicator extends StatefulWidget {
   final List<String> imageUrls;
   const CarouselWithIndicator({required this.imageUrls});
   @override
-  State<StatefulWidget> createState() {
-    return _CarouselWithIndicatorState();
-  }
+  State<StatefulWidget> createState() => _CarouselWithIndicatorState();
 }
 
 class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
