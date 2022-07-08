@@ -21,6 +21,35 @@ Future<Map<String, dynamic>> getCarParameters(String carUrl) async {
   }
 }
 
+Map<String, String> formCharacteristics(
+  Map<String, dynamic> chars,
+  String type,
+) {
+  Map<String, String> res = <String, String>{};
+  if (type == 'used') {
+    res['Наименование'] = chars['name'].toString();
+    res['Цена'] = chars['price'].toString();
+    res['Год выпуска'] = chars['year'].toString();
+    res['Пробег'] = chars['kmage'].toString();
+
+    res['Кузов'] = chars['body'].toString();
+    res['Цвет'] = chars['color'].toString();
+    res['Двигатель'] = chars['engine'].toString();
+    res['Коробка передач'] = chars['transmission'].toString();
+
+    res['Привод'] = chars['drive'].toString();
+    res['Руль'] = chars['wheel'].toString();
+    res['Состояние'] = chars['state'].toString();
+    res['Владельцы'] = chars['owners'].toString();
+
+    res['ПТС'] = chars['pts'].toString();
+    res['Таможня'] = chars['customs'].toString();
+    res['description'] = chars['desc'].toString();
+    res['characteristics'] = chars['chars'].toString();
+  } else {}
+  return res;
+}
+
 class CarPage extends StatefulWidget {
   final String carUrl;
   const CarPage({required this.carUrl});
@@ -30,6 +59,8 @@ class CarPage extends StatefulWidget {
 
 class _CarPageState extends State<CarPage> {
   late final String carUrl;
+
+  late final Map<String, String> chars;
 
   @override
   void initState() {
@@ -71,661 +102,118 @@ class _CarPageState extends State<CarPage> {
             );
           }
           final Map<String, dynamic> cChars = snap.data as Map<String, dynamic>;
+          if (!carUrl.contains('/new/')) {
+            chars = formCharacteristics(cChars, 'used');
+          } else {
+            chars = formCharacteristics(cChars, 'new');
+          }
           final List<String> urls = <String>[];
           for (int i = 0; i < (cChars['images_urls'].length as int); i++) {
             urls.add(cChars['images_urls'][i] as String);
           }
-          //создание идет по такому же принципу как и карточка, только здесь добавляется
-          //карусель с картинками, кнопки для характеристик и обратной связи. Также делится
-          //на новые и подержаные
-          if (!carUrl.contains('/new/')) {
-            return Scaffold(
-              body: Scrollbar(
-                child: SingleChildScrollView(
-                  child: Container(
-                    child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.only(top: 50),
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: CarouselWithIndicator(
-                              imageUrls: urls,
-                            ),
-                            decoration: const BoxDecoration(
+          return Scaffold(
+            body: Scrollbar(
+              child: SingleChildScrollView(
+                child: Container(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 50),
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          child: CarouselWithIndicator(
+                            imageUrls: urls,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: const Text(
+                            'Характеристики',
+                            style: TextStyle(
                               color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
                           ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            child: const Text(
-                              'Характеристики',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                        ),
+                        ListView.builder(
+                          itemBuilder: (BuildContext context, int index) {
+                            final String key = chars.keys.elementAt(index);
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text(
+                                      key,
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    ),
+                                    flex: 50,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      chars[key]!,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    ),
+                                    flex: 50,
+                                  ),
+                                ],
                               ),
+                            );
+                          },
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: const Text(
+                            'Комментарий продавца',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Наименование',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['name'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Цена',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['price'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Год выпуска',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['year'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Пробег',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['kmage'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Кузов',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['body'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Цвет',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['color'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Двигатель',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['engine'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Коробка передач',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['transmission'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Привод',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['drive'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Руль',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['wheel'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Состояние',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['state'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Владельцы',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['owners'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'ПТС',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['pts'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Таможня',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['customs'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          child: Text(
+                            cChars['desc'].toString(),
+                            textAlign: TextAlign.start,
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            child: const Text(
-                              'Комментарий продавца',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
+                        ),
+                        Container(
+                          child: TextButton(
+                            onPressed: () => <void>{
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<dynamic>(
+                                    builder: (BuildContext context) =>
+                                        CharsPage(
+                                            url: cChars['chars'].toString())),
+                              )
+                            },
+                            child: const Text('Характеристики автомобиля'),
                           ),
-                          Container(
-                            margin: const EdgeInsets.all(10),
-                            child: Text(
-                              cChars['desc'].toString(),
-                              textAlign: TextAlign.start,
-                            ),
+                        ),
+                        Container(
+                          child: TextButton(
+                            onPressed: () => <void>{_launchURL(carUrl)},
+                            child: const Text('Ссылка на источник'),
                           ),
-                          Container(
-                            child: TextButton(
-                              onPressed: () => <void>{
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<dynamic>(
-                                      builder: (BuildContext context) =>
-                                          CharsPage(
-                                              url: cChars['chars'].toString())),
-                                )
-                              },
-                              child: const Text('Характеристики автомобиля'),
-                            ),
-                          ),
-                          Container(
-                            child: TextButton(
-                              onPressed: () => <void>{_launchURL(carUrl)},
-                              child: const Text('Ссылка на источник'),
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
               ),
-            );
-          } else {
-            return Scaffold(
-              body: Scrollbar(
-                child: SingleChildScrollView(
-                  child: Container(
-                    child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.only(top: 50),
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: CarouselWithIndicator(
-                              imageUrls: urls,
-                            ),
-                            decoration: const BoxDecoration(
-                              color: Colors.black,
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            child: const Text(
-                              'Характеристики',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Кузов',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['body'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Цвет',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['color'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Двигатель',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['engine'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Коробка передач',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['transmission'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Привод',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['drive'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Налог',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['tax'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Expanded(
-                                        child: Text(
-                                          'Комплектация',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          cChars['complectation'].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        flex: 50,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            child: const Text(
-                              'Комментарий продавца',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(10),
-                            child: Text(
-                              cChars['desc'].toString(),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          Container(
-                            child: TextButton(
-                              onPressed: () => <void>{
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<dynamic>(
-                                      builder: (BuildContext context) =>
-                                          CharsPage(
-                                              url: cChars['chars'].toString())),
-                                )
-                              },
-                              child: const Text('Характеристики автомобиля'),
-                            ),
-                          ),
-                          Container(
-                            child: TextButton(
-                              onPressed: () => <void>{_launchURL(carUrl)},
-                              child: const Text('Ссылка на источник'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
+            ),
+          );
         },
       ),
     );
