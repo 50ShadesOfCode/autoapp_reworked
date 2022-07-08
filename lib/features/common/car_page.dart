@@ -25,7 +25,7 @@ Map<String, String> formCharacteristics(
   Map<String, dynamic> chars,
   String type,
 ) {
-  Map<String, String> res = <String, String>{};
+  final Map<String, String> res = <String, String>{};
   if (type == 'used') {
     res['Наименование'] = chars['name'].toString();
     res['Цена'] = chars['price'].toString();
@@ -56,7 +56,6 @@ Map<String, String> formCharacteristics(
     res['Коробка передач'] = chars['transmission'].toString();
 
     res['Привод'] = chars['drive'].toString();
-    
   }
   return res;
 }

@@ -329,6 +329,19 @@ class _SearchState extends State<Search> {
               ),
               Row(
                 children: <Widget>[
+                  //кнопка сбросить сбрасывает данные формы
+                  Expanded(
+                    child: ElevatedButton(
+                      child: const Text(
+                        'Сбросить',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        _formKey.currentState?.reset();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: ElevatedButton(
                       child: const Text(
@@ -354,19 +367,6 @@ class _SearchState extends State<Search> {
                         } else {
                           print('validation failed');
                         }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  //кнопка сбросить сбрасывает данные формы
-                  Expanded(
-                    child: ElevatedButton(
-                      child: const Text(
-                        'Сбросить',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        _formKey.currentState?.reset();
                       },
                     ),
                   ),

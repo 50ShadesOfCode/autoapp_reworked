@@ -24,7 +24,10 @@ dependencies:
   domain:
     path: domain
 
+  equatable: ^2.0.3
   get_it: ^7.2.0
+  flutter_bloc: ^8.0.1
+  bloc: ^8.0.3
   cupertino_icons: ^1.0.5
   favorite_button: ^0.0.4
   persistent_bottom_nav_bar_v2: ^4.2.4
