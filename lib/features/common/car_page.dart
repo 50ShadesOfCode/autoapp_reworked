@@ -44,9 +44,20 @@ Map<String, String> formCharacteristics(
 
     res['ПТС'] = chars['pts'].toString();
     res['Таможня'] = chars['customs'].toString();
-    res['description'] = chars['desc'].toString();
-    res['characteristics'] = chars['chars'].toString();
-  } else {}
+  } else {
+    res['Наименование'] = chars['name'].toString();
+    res['Цена'] = chars['price'].toString();
+    res['Комплектация'] = chars['complectation'].toString();
+    res['Налог'] = chars['tax'].toString();
+
+    res['Кузов'] = chars['body'].toString();
+    res['Цвет'] = chars['color'].toString();
+    res['Двигатель'] = chars['engine'].toString();
+    res['Коробка передач'] = chars['transmission'].toString();
+
+    res['Привод'] = chars['drive'].toString();
+    
+  }
   return res;
 }
 
