@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_app/features/common/car_page.dart';
+import 'package:auto_app/features/common/card.dart' as card;
 import 'package:auto_app/features/common/carousel_page.dart';
 import 'package:auto_app/utils/config.dart';
 import 'package:favorite_button/favorite_button.dart';
@@ -38,15 +39,15 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
       builder:
           (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Card(
-            child: Center(
+          return const card.Card(
+            Center(
               child: CircularProgressIndicator(),
             ),
           );
         }
         if (snapshot.data == null) {
-          return const Card(
-            child: Center(
+          return const card.Card(
+            Center(
               child: Text('Check your Internet connection!!'),
             ),
           );
@@ -59,8 +60,8 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
             i++) {
           urls.add('http://' + characteristics['images_urls'][i].toString());
         }
-        return Card(
-          child: InkWell(
+        return card.Card(
+          InkWell(
             onTap: () => <void>{
               Navigator.push(
                   context,
