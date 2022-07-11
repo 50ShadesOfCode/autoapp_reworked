@@ -13,4 +13,11 @@ class LaunchRepositoryImpl extends LaunchRepository {
   @override
   Future<void> setUsername(String username) =>
       _prefsProvider.setUsername(username);
+
+  @override
+  bool isDarkTheme() => _prefsProvider.getDarkTheme();
+
+  @override
+  Future<void> setDarkTheme(bool darkTheme) =>
+      _prefsProvider.setDarkTheme(darkTheme);
 }

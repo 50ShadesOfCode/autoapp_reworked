@@ -3,6 +3,7 @@ import 'package:auto_app/router/router.dart';
 import 'package:auto_app/router/router_configuration.dart';
 import 'package:core/core.dart';
 import 'package:core_ui/core_ui.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,11 +16,21 @@ class _ApplicationState extends State<Application> {
   late final AppRouter appRouter;
   late final RouteInformationParser<RouteConfiguration> routeInformationParser;
 
+  late bool isDarkTheme;
+
   @override
-  void initState() {
+  Future<void> initState() async {
     appRouter = appLocator.get<AppRouter>();
     routeInformationParser = appLocator.get<AppRouteInformationParser>();
+    await _configureTheme();
     super.initState();
+  }
+
+  Future<void> _configureTheme() async {
+    final bool value = appLocator.get<PrefsProvider>().getDarkTheme();
+    final ThemeProvider provider =
+        Provider.of<ThemeProvider>(context, listen: false);
+    provider.toggleTheme(value);
   }
 
   @override

@@ -4,8 +4,11 @@ import 'package:auto_app/features/settings/settings.dart';
 import 'package:core_ui/src/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+
+import 'bloc/home_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,19 +21,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<HomeBloc>(context).add(InitEvent());
     _controller = PersistentTabController(initialIndex: 0);
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeProvider provider = Provider.of<ThemeProvider>(context);
+    final bool isDarkMode =
+        BlocProvider.of<HomeBloc>(context).state.isDarktheme;
     return PersistentTabView(
       context,
       controller: _controller,
       screens: _buildScreens(),
       items: _navbarsItems(),
       confineInSafeArea: true,
-      backgroundColor: provider.isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,

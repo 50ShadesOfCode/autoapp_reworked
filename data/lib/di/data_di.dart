@@ -23,6 +23,16 @@ class DataDI {
         launchRepository: appLocator.get<LaunchRepository>(),
       ),
     );
+    appLocator.registerFactory<IsDarkThemeUseCase>(
+      () => IsDarkThemeUseCase(
+        launchRepository: appLocator.get<LaunchRepository>(),
+      ),
+    );
+    appLocator.registerFactory<SetDarkThemeUseCase>(
+      () => SetDarkThemeUseCase(
+        launchRepository: appLocator.get<LaunchRepository>(),
+      ),
+    );
   }
 
   Future<void> initPrefs() async {
