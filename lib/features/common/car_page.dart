@@ -1,26 +1,9 @@
-import 'dart:convert';
-
 import 'package:auto_app/features/common/carousel.dart';
 import 'package:auto_app/features/common/characteristics_page.dart';
-import 'package:auto_app/utils/config.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
-//получаем словарь с параметрами автомобиля таким же образом, как и в других функциях
-Future<Map<String, dynamic>> getCarParameters(String carUrl) async {
-  final Uri url = Uri.parse('https://fpmiautoparser.herokuapp.com/getCarByUrl');
-  final String body = json.encode(<String, dynamic>{'url': carUrl});
-  final http.Response res = await http.post(url, body: body, headers: headers);
-  if (res.statusCode == 200) {
-    final Map<String, dynamic> jsonRes =
-        json.decode(res.body) as Map<String, dynamic>;
-    return jsonRes;
-  } else {
-    return <String, dynamic>{};
-  }
-}
-
+//TODO: Move to  apiprovider, add new
 Map<String, String> formCharacteristics(
   Map<String, dynamic> chars,
   String type,

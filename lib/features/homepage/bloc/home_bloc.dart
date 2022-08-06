@@ -14,7 +14,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required IsDarkThemeUseCase isDarkThemeUseCase,
   })  : _appRouter = appRouter,
         _isDarkThemeUseCase = isDarkThemeUseCase,
-        super(const HomeState(isDarktheme: false));
+        super(const HomeState(isDarktheme: false)) {
+    on<InitEvent>(_onInitEvent);
+  }
 
   final AppRouter _appRouter;
   final IsDarkThemeUseCase _isDarkThemeUseCase;

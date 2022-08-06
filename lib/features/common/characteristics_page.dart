@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:auto_app/utils/config.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class CharsPage extends StatefulWidget {
   final String url;
@@ -69,19 +65,4 @@ class _CharsPageState extends State<CharsPage> {
       ),
     );
   }
-}
-
-//ответ с сервера приходит в виде название:характеристика, поэтому нужен обычный словарь
-Future<Map<String, dynamic>> _getParams(String url) async {
-  final http.Response res = await http.post(
-    Uri.parse('https://fpmiautoparser.herokuapp.com/getCharsByUrl'),
-    body: json.encode(<String, dynamic>{'url': url}),
-    headers: headers,
-  );
-  if (res.statusCode == 200) {
-    final Map<String, dynamic> vals =
-        json.decode(res.body) as Map<String, dynamic>;
-    return vals;
-  }
-  return <String, dynamic>{};
 }

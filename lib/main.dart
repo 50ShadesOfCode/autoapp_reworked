@@ -4,6 +4,7 @@ import 'package:auto_app/application.dart';
 import 'package:auto_app/utils/notification_service.dart';
 import 'package:auto_app/utils/notifications.dart';
 import 'package:core/core.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   appDI.initDependencies();
+  await dataDI.initDependencies();
   await _configureLocalTimeZone();
   await NotificationService().init();
   await initNotifications();

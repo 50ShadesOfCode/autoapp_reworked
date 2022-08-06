@@ -1,12 +1,23 @@
 import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:http/http.dart';
 
 final DataDI dataDI = DataDI();
 
 class DataDI {
   Future<void> initDependencies() async {
     await initPrefs();
+    appLocator.registerSingleton<HttpAppClient>(
+      HttpAppClient(
+        httpClient: Client(),
+      ),
+    );
+    appLocator.registerSingleton(
+      ApiProvider(
+        client: appLocator.get<HttpAppClient>(),
+      ),
+    );
     appLocator.registerLazySingleton<LaunchRepository>(
       () => LaunchRepositoryImpl(
         prefsProvider: appLocator.get<PrefsProvider>(),

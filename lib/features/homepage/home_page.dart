@@ -17,7 +17,7 @@ class HomePage extends PageWithScaffoldKey<dynamic> {
           create: (_) => HomeBloc(
             appRouter: appLocator.get<AppRouter>(),
             isDarkThemeUseCase: appLocator.get<IsDarkThemeUseCase>(),
-          ),
+          )..add(InitEvent()),
           child: SafeArea(
             child: ScaffoldMessenger(
               key: scaffoldKey,

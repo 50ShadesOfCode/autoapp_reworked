@@ -1,6 +1,10 @@
-import 'package:auto_app/features/common/car_list_page.dart';
+import 'package:auto_app/features/car_list/bloc/car_list_bloc.dart';
+import 'package:auto_app/features/car_list/car_list_page.dart';
+import 'package:core/core.dart';
+import 'package:data/providers/api_provider.dart';
 import 'package:domain/helpers/url_maker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class Search extends StatefulWidget {
@@ -359,11 +363,17 @@ class _SearchState extends State<Search> {
                           print(url);
                           //переходим на страницу со списком автомобилей
                           Navigator.push(
-                              context,
-                              MaterialPageRoute<dynamic>(
-                                builder: (BuildContext context) =>
-                                    CarListPage(url: url),
-                              ));
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) =>
+                                  BlocProvider<CarListBloc>(
+                                create: (BuildContext context) => CarListBloc(
+                                  apiProvider: appLocator.get<ApiProvider>(),
+                                ),
+                                child: CarListPage(url: url),
+                              ),
+                            ),
+                          );
                         } else {
                           print('validation failed');
                         }

@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:auto_app/utils/config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -142,13 +138,6 @@ tz.TZDateTime _nextInstanceOfFourAM() {
 
 ///получает количество автомобилей по заданным характеристикам с сервера, сравнивает с сохраненным и в зависимости от сравнения выдает текст уведомления
 Future<String> _getNotsText(String url) async {
-  final http.Response res = await http.post(
-    Uri.parse('https://fpmiautoparser.herokuapp.com/getNotUpdate'),
-    body: json.encode(<String, dynamic>{
-      'url': url,
-    }),
-    headers: headers,
-  );
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (res.body == prefs.getString('carups')) {
     return 'Новых поступлений нет!';

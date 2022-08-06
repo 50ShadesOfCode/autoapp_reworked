@@ -23,12 +23,6 @@ class _SettingsState extends State<Settings> {
   final TextEditingController _textControllerMail = TextEditingController();
 
   @override
-  void initState() {
-    BlocProvider.of<SettingsBloc>(context).add(InitEvent());
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _textController.dispose();
     _textControllerMail.dispose();
@@ -44,7 +38,7 @@ class _SettingsState extends State<Settings> {
         setDarkThemeUseCase: appLocator.get<SetDarkThemeUseCase>(),
         setUsernameUseCase: appLocator.get<SetUsernameUseCase>(),
         getUsernameUseCase: appLocator.get<GetUsernameUseCase>(),
-      ),
+      )..add(InitEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Настройки'),

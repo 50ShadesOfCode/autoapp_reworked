@@ -16,32 +16,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  PersistentTabController _controller = PersistentTabController();
-
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<HomeBloc>(context).add(InitEvent());
-    _controller = PersistentTabController(initialIndex: 0);
-  }
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode =
-        BlocProvider.of<HomeBloc>(context).state.isDarktheme;
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navbarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: isDarkMode ? Colors.black : Colors.white,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: true,
-      hideNavigationBarWhenKeyboardShows: true,
-      navBarStyle: NavBarStyle.style9,
-    );
+    return BlocBuilder<HomeBloc, HomeState>(
+        builder: (BuildContext context, HomeState state) {
+      final ThemeProvider provider = Provider.of<ThemeProvider>(context);
+      return PersistentTabView(
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: _navbarsItems(),
+        confineInSafeArea: true,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        backgroundColor: provider.isDarkMode ? Colors.black : Colors.white,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        navBarStyle: NavBarStyle.style1,
+      );
+    });
   }
 }
 

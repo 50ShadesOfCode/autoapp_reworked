@@ -19,24 +19,18 @@ class _ApplicationState extends State<Application> {
   late bool isDarkTheme;
 
   @override
-  Future<void> initState() async {
+  void initState() {
     appRouter = appLocator.get<AppRouter>();
     routeInformationParser = appLocator.get<AppRouteInformationParser>();
-    await _configureTheme();
+    isDarkTheme = appLocator.get<PrefsProvider>().getDarkTheme();
     super.initState();
-  }
-
-  Future<void> _configureTheme() async {
-    final bool value = appLocator.get<PrefsProvider>().getDarkTheme();
-    final ThemeProvider provider =
-        Provider.of<ThemeProvider>(context, listen: false);
-    provider.toggleTheme(value);
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ThemeProvider>(
-      create: (BuildContext context) => ThemeProvider(),
+      create: (BuildContext context) =>
+          ThemeProvider()..toggleTheme(isDarkTheme),
       builder: (BuildContext context, _) {
         final ThemeProvider provider = Provider.of<ThemeProvider>(context);
         return MaterialApp.router(

@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_app/features/common/card.dart' as card;
 import 'package:auto_app/features/favourite/favourite_card.dart';
-import 'package:auto_app/utils/config.dart';
 import 'package:domain/entities/favourite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -139,27 +136,5 @@ class _FavoriteState extends State<Favorite> {
         },
       ),
     );
-  }
-}
-
-//получаем параметры карточки
-Future<Map<String, dynamic>> getCardParameters(String carUrl) async {
-  print(carUrl);
-  final Uri url =
-      Uri.parse('https://fpmiautoparser.herokuapp.com/getCardByUrl');
-  final String body = json.encode(<String, dynamic>{
-    'url': carUrl,
-  });
-  final http.Response res = await http.post(
-    url,
-    body: body,
-    headers: headers,
-  );
-  if (res.statusCode == 200) {
-    final Map<String, dynamic> jsonRes =
-        json.decode(res.body) as Map<String, dynamic>;
-    return jsonRes;
-  } else {
-    return <String, dynamic>{};
   }
 }
