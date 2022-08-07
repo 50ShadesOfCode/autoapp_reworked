@@ -31,222 +31,220 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Настройки'),
-      ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    child: Expanded(
-                      flex: 75,
-                      child: TextField(
-                        decoration:
-                            const InputDecoration(hintText: 'Имя пользователя'),
-                        controller: _usernameController,
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (BuildContext context, SettingsState state) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Настройки'),
+        ),
+        body: Container(
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: Expanded(
+                        flex: 75,
+                        child: TextFormField(
+                          initialValue: state.username,
+                          decoration: const InputDecoration(
+                              hintText: 'Имя пользователя'),
+                          controller: _usernameController,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 30,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_usernameController.text == '') {
-                          return;
-                        }
-                        BlocProvider.of<SettingsBloc>(context).add(
-                            SetUsernameEvent(
-                                username: _usernameController.text));
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Имя пользователя сохранено'),
-                        ));
-                      },
-                      child: const Text('Сохранить'),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Темная тема'),
-                    ChangeThemeButtonWidget(),
+                    Expanded(
+                      flex: 30,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_usernameController.text == '') {
+                            return;
+                          }
+                          BlocProvider.of<SettingsBloc>(context).add(
+                              SetUsernameEvent(
+                                  username: _usernameController.text));
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Имя пользователя сохранено'),
+                          ));
+                        },
+                        child: const Text('Сохранить'),
+                      ),
+                    )
                   ],
                 ),
               ),
-            ),
-            Container(
-              child: Column(children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  child: DropdownButton<int>(
-                    hint: const Text('Выберите частоту уведомлений'),
-                    value: selectedRate,
-                    //при выборе какого либо элемента сохраняет частоту в SharedPreferences и запускает уведомления с выбранной частотой
-                    onChanged: (int? value) async {
-                      setState(() {
-                        selectedRate = value as int;
-                      });
-                      print(value);
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setInt('rate', value as int);
-                      cancelAllNotifications();
-                      if (value == 1) {
-                        schedule45MinNotification();
-                      }
-                      if (value == 2) {
-                        repeatNotificationHourly();
-                      }
-                      if (value == 3) {
-                        scheduleDailyFourAMNotification();
-                      }
-                    },
-                    //список частот уведомлений
-                    items: <DropdownMenuItem<int>>[
-                      DropdownMenuItem<int>(
-                        value: 0,
-                        child: Row(
-                          children: const <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Не показывать уведомления',
-                            ),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem<int>(
-                        value: 1,
-                        child: Row(
-                          children: const <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Показывать каждые 45 минут',
-                            ),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem<int>(
-                        value: 2,
-                        child: Row(
-                          children: const <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Показывать каждый час',
-                            ),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem<int>(
-                        value: 3,
-                        child: Row(
-                          children: const <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Показывать ежедневно',
-                            ),
-                          ],
-                        ),
-                      )
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text('Темная тема'),
+                      ChangeThemeButtonWidget(),
                     ],
                   ),
                 ),
-                //кнопка для перехода на страницу с параметрами уведомлений
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  child: TextButton(
-                    onPressed: () => <void>{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (BuildContext context) =>
-                              BlocProvider<NotificationsBloc>(
-                            create: (BuildContext context) => NotificationsBloc(
-                              apiProvider: appLocator.get<ApiProvider>(),
-                            ),
-                            child: NotificationsPage(),
+              ),
+              Container(
+                child: Column(children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    child: DropdownButton<int>(
+                      hint: const Text('Выберите частоту уведомлений'),
+                      value: selectedRate,
+                      onChanged: (int? value) async {
+                        setState(() {
+                          selectedRate = value!;
+                        });
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setInt('rate', value!);
+                        cancelAllNotifications();
+                        if (value == 1) {
+                          schedule45MinNotification();
+                        }
+                        if (value == 2) {
+                          repeatNotificationHourly();
+                        }
+                        if (value == 3) {
+                          scheduleDailyFourAMNotification();
+                        }
+                      },
+                      items: <DropdownMenuItem<int>>[
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Не показывать уведомления',
+                              ),
+                            ],
                           ),
                         ),
-                      )
-                    },
-                    child: const Text('Изменить параметры уведомлений'),
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Показывать каждые 45 минут',
+                              ),
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 2,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Показывать каждый час',
+                              ),
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 3,
+                          child: Row(
+                            children: const <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Показывать ежедневно',
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ]),
-            ),
-
-            //поле для ввода сообщения обратной связи. при нажатии на отправить открывается почта уже с введенной темой текстом и тд
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              child: Row(
-                children: <Widget>[
+                  //кнопка для перехода на страницу с параметрами уведомлений
                   Container(
-                    child: Expanded(
-                      flex: 75,
-                      child: TextField(
-                        decoration:
-                            const InputDecoration(hintText: 'Обратная связь'),
-                        controller: _mailController,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextButton(
+                      onPressed: () => <void>{
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                BlocProvider<NotificationsBloc>(
+                              create: (BuildContext context) =>
+                                  NotificationsBloc(
+                                apiProvider: appLocator.get<ApiProvider>(),
+                              ),
+                              child: NotificationsPage(),
+                            ),
+                          ),
+                        )
+                      },
+                      child: const Text('Изменить параметры уведомлений'),
+                    ),
+                  ),
+                ]),
+              ),
+
+              //поле для ввода сообщения обратной связи. при нажатии на отправить открывается почта уже с введенной темой текстом и тд
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: Expanded(
+                        flex: 75,
+                        child: TextField(
+                          decoration:
+                              const InputDecoration(hintText: 'Обратная связь'),
+                          controller: _mailController,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 30,
-                    //TODO: Move to bloc
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_mailController.text == '') {
-                          return;
-                        }
-                        final Email email = Email(
-                            body: _mailController.text,
-                            subject: 'Обратная связь в приложении',
-                            recipients: <String>['kaktymail@gmail.com'],
-                            isHTML: false);
-                        await FlutterEmailSender.send(email);
-                      },
-                      child: const Text('Отправить'),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
+                    Expanded(
+                      flex: 30,
+                      //TODO: Move to bloc
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_mailController.text == '') {
+                            return;
+                          }
+                          final Email email = Email(
+                              body: _mailController.text,
+                              subject: 'Обратная связь в приложении',
+                              recipients: <String>['kaktymail@gmail.com'],
+                              isHTML: false);
+                          await FlutterEmailSender.send(email);
+                        },
+                        child: const Text('Отправить'),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-//виджет с переключателем для темы
 class ChangeThemeButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return Switch.adaptive(
-      //начальное значение
       value: themeProvider.isDarkMode,
-      //если белая, включаем темную, и наоборот
       onChanged: (bool value) {
         final ThemeProvider provider =
             Provider.of<ThemeProvider>(context, listen: false);
