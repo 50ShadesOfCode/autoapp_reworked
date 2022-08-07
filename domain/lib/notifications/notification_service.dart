@@ -94,7 +94,7 @@ class NotificationService {
 
   Future<void> schedule45MinNotification() async {
     final String url = _prefsProvider.getNotificationUrl();
-    if (url) return;
+    if (url.isEmpty) return;
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'Happy Wheels',
@@ -153,12 +153,10 @@ class NotificationService {
     return scheduledDate;
   }
 
-//TODO: Move to bloc?
   Future<String> _getNotsText(String url) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final ApiProvider provider = appLocator.get<ApiProvider>();
     final String amount = await provider.getNotificationUpdates(url);
-    if (amount == prefs.getString('carups')) {
+    if (amount == _prefsProvider.getCarAmount()) {
       return 'Новых поступлений нет!';
     } else {
       return 'Новые поступления по вашим параметрам!';

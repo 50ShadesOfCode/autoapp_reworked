@@ -10,20 +10,23 @@ export 'notifications_state.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   final ApiProvider _apiProvider;
+  final PrefsProvider _prefsProvider;
 
   NotificationsBloc({
     required ApiProvider apiProvider,
+    required PrefsProvider prefsProvider,
   })  : _apiProvider = apiProvider,
+        _prefsProvider = prefsProvider,
         super(NotificationsState()) {
     on<SaveEvent>(_onSaveEvent);
   }
 
   Future<void> _onSaveEvent(
       SaveEvent event, Emitter<NotificationsState> emit) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('noturl', event.url);
-    final String carups = await _apiProvider.getNotificationUpdates(event.url);
-    prefs.setString('carups', carups);
+    _prefsProvider.setNotificationsUrl(event.url);
+    final String carAmount =
+        await _apiProvider.getNotificationUpdates(event.url);
+    _prefsProvider.setCarAmount(carAmount);
     emit(state);
   }
 }

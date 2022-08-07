@@ -22,13 +22,13 @@ Future<void> main() async {
   rate ??= 2;
 
   if (rate == 0) {
-    appLocator.get<NotificationService>()cancelAllNotifications();
+    appLocator.get<NotificationService>().cancelAllNotifications();
   } else if (rate == 1) {
-    schedule45MinNotification();
+    appLocator.get<NotificationService>().schedule45MinNotification();
   } else if (rate == 2) {
-    repeatNotificationHourly();
+    appLocator.get<NotificationService>().repeatNotificationHourly();
   } else {
-    scheduleDailyFourAMNotification();
+    appLocator.get<NotificationService>().scheduleDailyFourAMNotification();
   }
 
   runApp(Application());

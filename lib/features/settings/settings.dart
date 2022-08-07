@@ -4,6 +4,7 @@ import 'package:auto_app/features/settings/notifications_page/notifications_page
 import 'package:auto_app/router/router.dart';
 import 'package:core/core.dart';
 import 'package:core_ui/src/theme_provider.dart';
+import 'package:data/data.dart';
 import 'package:data/providers/api_provider.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -191,6 +192,7 @@ class _SettingsState extends State<Settings> {
                               create: (BuildContext context) =>
                                   NotificationsBloc(
                                 apiProvider: appLocator.get<ApiProvider>(),
+                                prefsProvider: appLocator.get<PrefsProvider>(),
                               ),
                               child: NotificationsPage(),
                             ),
