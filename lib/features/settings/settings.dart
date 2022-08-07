@@ -103,15 +103,23 @@ class _SettingsState extends State<Settings> {
                         final SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         prefs.setInt('rate', value!);
-                        cancelAllNotifications();
+                        appLocator
+                            .get<NotificationService>()
+                            .cancelAllNotifications();
                         if (value == 1) {
-                          schedule45MinNotification();
+                          appLocator
+                              .get<NotificationService>()
+                              .schedule45MinNotification();
                         }
                         if (value == 2) {
-                          repeatNotificationHourly();
+                          appLocator
+                              .get<NotificationService>()
+                              .repeatNotificationHourly();
                         }
                         if (value == 3) {
-                          scheduleDailyFourAMNotification();
+                          appLocator
+                              .get<NotificationService>()
+                              .scheduleDailyFourAMNotification();
                         }
                       },
                       items: <DropdownMenuItem<int>>[

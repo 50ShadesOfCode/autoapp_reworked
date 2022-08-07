@@ -8,6 +8,7 @@ final DataDI dataDI = DataDI();
 class DataDI {
   Future<void> initDependencies() async {
     await initPrefs();
+    await initNotifications();
     appLocator.registerSingleton<HttpAppClient>(
       HttpAppClient(
         httpClient: Client(),
@@ -54,6 +55,16 @@ class DataDI {
 
     appLocator.registerSingleton<PrefsProvider>(
       prefsProvider,
+    );
+  }
+
+  Future<void> initNotifications() async {
+    final NotificationService notificationService = NotificationService();
+
+    await Future.wait(<Future<void>>[notificationService.init()]);
+
+    appLocator.registerSingleton<NotificationService>(
+      notificationService,
     );
   }
 }

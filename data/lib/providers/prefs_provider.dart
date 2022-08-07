@@ -5,6 +5,7 @@ class PrefsProvider {
 
   static const String _keyUsername = 'username';
   static const String _keyDarkTheme = 'darkTheme';
+  static const String _keyNotificationsUrl = 'notificationsUrl';
 
   Future<void> initializeSharedPreferences() async {
     _sharedPreferences = await SharedPreferences.getInstance();
@@ -26,5 +27,15 @@ class PrefsProvider {
   bool getDarkTheme() {
     final bool? darkTheme = _sharedPreferences.getBool(_keyDarkTheme);
     return darkTheme ?? false;
+  }
+
+  String getNotificationUrl() {
+    final String? notificationsUrl =
+        _sharedPreferences.getString(_keyNotificationsUrl);
+    return notificationsUrl ?? '';
+  }
+
+  Future<void> setNotificationsUrl(String notificationsUrl) async {
+    await _sharedPreferences.setString(_keyNotificationsUrl, notificationsUrl);
   }
 }
