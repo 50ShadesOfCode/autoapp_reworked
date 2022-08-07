@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:auto_app/application.dart';
-import 'package:auto_app/utils/notification_service.dart';
-import 'package:auto_app/utils/notifications.dart';
 import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
@@ -16,22 +12,10 @@ Future<void> main() async {
 
   appDI.initDependencies();
   await dataDI.initDependencies();
-  await _configureLocalTimeZone();
-  await NotificationService().init();
-  await initNotifications();
 
-  runApp(Application());
-}
-
-///Получает и настраивает время для приложения в соответствии с местным
-///Используется для корректной отправки уведомлений
-Future<void> _configureLocalTimeZone() async {
   tz.initializeTimeZones();
   final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(timeZoneName!));
-}
-
-Future<void> initNotifications() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   int? rate = prefs.getInt('rate');
   rate ??= 2;
@@ -45,4 +29,6 @@ Future<void> initNotifications() async {
   } else {
     scheduleDailyFourAMNotification();
   }
+
+  runApp(Application());
 }

@@ -56,6 +56,8 @@ class _CarListPageState extends State<CarListPage> {
                           ),
                           child: CarCard(
                             cardUrl: state.data[index],
+                            //TODO : add check on favourite
+                            isFavourite: false,
                           ),
                         );
                       },

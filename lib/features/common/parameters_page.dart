@@ -1,23 +1,41 @@
-import 'package:domain/helpers/url_maker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class NotiChars extends StatefulWidget {
+class ParametersPage extends StatefulWidget {
+  final Widget child;
+  final String title;
+  final GlobalKey<FormBuilderState> formKey;
+  const ParametersPage({
+    required this.child,
+    required this.title,
+    required this.formKey,
+  });
   @override
-  _NotiChars createState() => _NotiChars();
+  _ParametersPageState createState() => _ParametersPageState();
 }
 
-//Характеристики по которым отправляются уведомления. Код по большей части идентичен с кодом поиска, если только пару моментов.
-class _NotiChars extends State<NotiChars> {
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+class _ParametersPageState extends State<ParametersPage> {
+  late final GlobalKey<FormBuilderState> _formKey;
+  late final String title;
+  late final Widget child;
+
+  @override
+  void initState() {
+    super.initState();
+    _formKey = widget.formKey;
+    title = widget.title;
+    child = widget.child;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Поиск'),
-        ),
-        body: SingleChildScrollView(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               FormBuilder(
@@ -31,11 +49,6 @@ class _NotiChars extends State<NotiChars> {
                         decoration: const InputDecoration(
                           labelText: 'Марка автомобиля',
                         ),
-                        // valueTransformer: (text) => num.tryParse(text),
-                        //validator: FormBuilderValidators.compose([
-                        //FormBuilderValidators.required(context),
-                        //FormBuilderValidators.max(context, 70),
-                        //]),
                       ),
                     ),
                     Container(
@@ -44,25 +57,16 @@ class _NotiChars extends State<NotiChars> {
                         decoration: const InputDecoration(
                           labelText: 'Модель автомобиля',
                         ),
-                        // valueTransformer: (text) => num.tryParse(text),
-                        //validator: FormBuilderValidators.compose([
-                        //FormBuilderValidators.required(context),
-                        //FormBuilderValidators.max(context, 70),
-                        //]),
                       ),
                     ),
                     Container(
                       child: FormBuilderDropdown<String?>(
-                        // autovalidate: true,
                         name: 'body',
                         decoration: const InputDecoration(
                           labelText: 'Кузов',
                         ),
-                        // initialValue: 'Male',
                         allowClear: true,
                         hint: const Text('Выберите кузов'),
-                        /*validator: FormBuilderValidators.compose(
-                        [FormBuilderValidators.required(context)]),*/
                         items: const <DropdownMenuItem<String>>[
                           DropdownMenuItem<String>(
                             value: 'SEDAN',
@@ -135,11 +139,8 @@ class _NotiChars extends State<NotiChars> {
                         decoration: const InputDecoration(
                           labelText: 'Коробка передач',
                         ),
-                        // initialValue: 'Male',
                         allowClear: true,
                         hint: const Text('Выберите вид коробки'),
-                        /*validator: FormBuilderValidators.compose(
-                        [FormBuilderValidators.required(context)]),*/
                         items: const <DropdownMenuItem<String>>[
                           DropdownMenuItem<String>(
                             value: 'AUTO',
@@ -175,11 +176,10 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'Год от',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context)//FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
+                          ),
+                          const SizedBox(
+                            width: 5,
                           ),
                           Expanded(
                             flex: 50,
@@ -188,11 +188,6 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'до',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
                           )
                         ],
@@ -200,61 +195,53 @@ class _NotiChars extends State<NotiChars> {
                     ),
                     Container(
                       child: FormBuilderDropdown<String?>(
-                        // autovalidate: true,
-                        name: 'engine_group',
-                        decoration: const InputDecoration(
-                          labelText: 'Двигатель',
-                        ),
-                        // initialValue: 'Male',
-                        allowClear: true,
-                        hint: const Text('Выберите вид двигателя'),
-                        /*validator: FormBuilderValidators.compose(
-                        [FormBuilderValidators.required(context)]),*/
-                        items: const <DropdownMenuItem<String>>[
-                          DropdownMenuItem<String>(
-                            value: 'GASOLINE',
-                            child: Text('Бензин'),
+                          name: 'engine_group',
+                          decoration: const InputDecoration(
+                            labelText: 'Двигатель',
                           ),
-                          DropdownMenuItem<String>(
-                            value: 'DIESEL',
-                            child: Text('Дизель'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'HYBRID',
-                            child: Text('Гибрид'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'ELECTRO',
-                            child: Text('Электро'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'TURBO',
-                            child: Text('Турбированный'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'ATMO',
-                            child: Text('Атмосферный'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'LPG',
-                            child: Text('Газобалонное оборудование'),
-                          ),
-                        ],
-                        onChanged: print,
-                      ),
+                          // initialValue: 'Male',
+                          allowClear: true,
+                          hint: const Text('Выберите вид двигателя'),
+                          items: const <DropdownMenuItem<String>>[
+                            DropdownMenuItem<String>(
+                              value: 'GASOLINE',
+                              child: Text('Бензин'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'DIESEL',
+                              child: Text('Дизель'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'HYBRID',
+                              child: Text('Гибрид'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'ELECTRO',
+                              child: Text('Электро'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'TURBO',
+                              child: Text('Турбированный'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'ATMO',
+                              child: Text('Атмосферный'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'LPG',
+                              child: Text('Газобалонное оборудование'),
+                            ),
+                          ],
+                          onChanged: print),
                     ),
                     Container(
                       child: FormBuilderDropdown<String?>(
-                          // autovalidate: true,
                           name: 'gear_type',
                           decoration: const InputDecoration(
                             labelText: 'Привод',
                           ),
-                          // initialValue: 'Male',
                           allowClear: true,
                           hint: const Text('Выберите вид привода'),
-                          /*validator: FormBuilderValidators.compose(
-                        [FormBuilderValidators.required(context)]),*/
                           items: const <DropdownMenuItem<String>>[
                             DropdownMenuItem<String>(
                               value: 'FORWARD_CONTROL',
@@ -281,12 +268,10 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'Пробег от',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
+                          ),
+                          const SizedBox(
+                            width: 5,
                           ),
                           Expanded(
                             flex: 50,
@@ -295,11 +280,6 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'до',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
                           )
                         ],
@@ -315,12 +295,10 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'Объем от',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
+                          ),
+                          const SizedBox(
+                            width: 5,
                           ),
                           Expanded(
                             flex: 50,
@@ -329,11 +307,6 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'до',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
                           )
                         ],
@@ -349,12 +322,10 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'Цена от',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
+                          ),
+                          const SizedBox(
+                            width: 5,
                           ),
                           Expanded(
                             flex: 50,
@@ -363,11 +334,6 @@ class _NotiChars extends State<NotiChars> {
                               decoration: const InputDecoration(
                                 labelText: 'до',
                               ),
-                              // valueTransformer: (text) => num.tryParse(text),
-                              //validator: FormBuilderValidators.compose([
-                              //FormBuilderValidators.required(context),
-                              //FormBuilderValidators.max(context, 70),
-                              //]),
                             ),
                           ),
                         ],
@@ -376,55 +342,11 @@ class _NotiChars extends State<NotiChars> {
                   ],
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    //при нажатии создает новую ссылку по заданным параметрам
-                    child: MaterialButton(
-                      color: Theme.of(context).colorScheme.secondary,
-                      child: const Text(
-                        'Сохранить',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        _formKey.currentState?.save();
-                        if (_formKey.currentState?.validate() == true) {
-                          print(_formKey.currentState?.value);
-                          //создает
-                          final String url = makeUrl(_formKey
-                              .currentState?.value as Map<String, dynamic>);
-                          print(url);
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          //сохраняет в SharedPreferences
-                          prefs.setString('noturl', url);
-                          //выполняет запрос на сервер для получения числа автомобилей
-
-                          //сохраняет число автомобилей в SharedPreferences
-                          prefs.setString('carups', res.body);
-                        } else {
-                          print('validation failed');
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: MaterialButton(
-                      color: Theme.of(context).colorScheme.secondary,
-                      child: const Text(
-                        'Сбросить',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        _formKey.currentState?.reset();
-                      },
-                    ),
-                  ),
-                ],
-              )
+              child,
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

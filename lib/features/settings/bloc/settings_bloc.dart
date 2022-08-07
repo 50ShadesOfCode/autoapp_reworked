@@ -27,11 +27,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         _getUsernameUseCase = getUsernameUseCase,
         _setUsernameUseCase = setUsernameUseCase,
         super(const SettingsState(username: '', isDarkTheme: false)) {
-    on<InitEvent>(_onInitEvent);
+    on<InitSettingsEvent>(_onInitEvent);
     on<SwitchThemeEvent>(_onSwitchThemeEvent);
   }
   Future<void> _onInitEvent(
-      InitEvent event, Emitter<SettingsState> emit) async {
+      InitSettingsEvent event, Emitter<SettingsState> emit) async {
     final String username = _getUsernameUseCase.execute(NoParams());
     final bool isDark = _isDarkThemeUseCase.execute(NoParams());
     emit(state.copyWith(
@@ -46,6 +46,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(
       username: state.username,
       isDarkTheme: !state.isDarkTheme,
+    ));
+  }
+
+  Future<void> _onSetUsernameEvent(
+      SetUsernameEvent event, Emitter<SettingsState> emit) async {
+    _setUsernameUseCase.execute(event.username);
+    emit(state.copyWith(
+      username: event.username,
+      isDarkTheme: state.isDarkTheme,
     ));
   }
 }

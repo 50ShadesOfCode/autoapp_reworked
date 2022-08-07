@@ -1,7 +1,11 @@
 import 'package:auto_app/features/favourite/favorite.dart';
-import 'package:auto_app/features/search/search.dart';
+import 'package:auto_app/features/search/search_page.dart';
+import 'package:auto_app/features/settings/bloc/settings_bloc.dart';
 import 'package:auto_app/features/settings/settings.dart';
+import 'package:auto_app/router/router.dart';
+import 'package:core/core.dart';
 import 'package:core_ui/src/theme_provider.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  PersistentTabController _controller =
+  final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
   @override
@@ -44,8 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
 List<Widget> _buildScreens() {
   return <Widget>[
     Favorite(),
-    Search(),
-    Settings(),
+    SearchPage(),
+    BlocProvider<SettingsBloc>(
+      create: (_) => SettingsBloc(
+        appRouter: appLocator.get<AppRouter>(),
+        isDarkThemeUseCase: appLocator.get<IsDarkThemeUseCase>(),
+        setDarkThemeUseCase: appLocator.get<SetDarkThemeUseCase>(),
+        setUsernameUseCase: appLocator.get<SetUsernameUseCase>(),
+        getUsernameUseCase: appLocator.get<GetUsernameUseCase>(),
+      )..add(InitSettingsEvent()),
+      child: Settings(),
+    ),
   ];
 }
 

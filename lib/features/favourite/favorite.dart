@@ -1,36 +1,13 @@
-import 'dart:io';
-
-import 'package:auto_app/features/common/card.dart' as card;
-import 'package:auto_app/features/favourite/favourite_card.dart';
-import 'package:domain/entities/favourite.dart';
+import 'package:auto_app/features/car_card/bloc/card_bloc.dart';
+import 'package:auto_app/features/car_card/car_card.dart';
+import 'package:auto_app/features/favourite/bloc/favourite_bloc.dart';
+import 'package:core/core.dart';
+import 'package:data/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 //TODO: favs in search
-
-Future<List<String>> buildList() async {
-  final Directory docsPath = await getApplicationDocumentsDirectory();
-  final Database db = await openDatabase(
-    docsPath.path + 'autofavs.db',
-    version: 1,
-    onCreate: (Database db, int version) async {
-      await db.execute('CREATE TABLE Favs ('
-          'url TEXT'
-          ')');
-    },
-  );
-  final List<Map<String, Object?>> res = await db.query('Favs');
-  final List<FavModel> list =
-      res.isNotEmpty ? res.map(FavModel.fromMap).toList() : <FavModel>[];
-  final List<String> urls = <String>[];
-  for (final FavModel ms in list) {
-    urls.add(ms.url);
-  }
-  return urls;
-}
-
 class Favorite extends StatefulWidget {
   @override
   _FavoriteState createState() => _FavoriteState();
@@ -57,18 +34,13 @@ class _FavoriteState extends State<Favorite> {
           )
         ],
       ),
-      body: FutureBuilder<List<String>>(
-        future: buildList(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<List<String>> snap,
-        ) {
-          if (snap.connectionState == ConnectionState.waiting) {
+      body: BlocBuilder<FavouriteBloc, FavouriteState>(
+        builder: (BuildContext context, FavouriteState state) {
+          if (state.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (snap.data!.isEmpty &&
-              snap.connectionState == ConnectionState.done) {
+          } else if (state.data.isEmpty && !state.isLoading) {
             return const Center(
               child: Text('Пока еще ничего нет!'),
             );
@@ -82,48 +54,16 @@ class _FavoriteState extends State<Favorite> {
                   Expanded(
                     child: Scrollbar(
                       child: ListView.builder(
-                        itemCount: snap.data?.length,
-                        itemBuilder: (
-                          BuildContext context,
-                          int index,
-                        ) {
-                          return FutureBuilder<Map<String, dynamic>>(
-                            future: getCardParameters(snap.data![index]),
-                            builder: (
-                              BuildContext context,
-                              AsyncSnapshot<Map<String, dynamic>> snapshot,
-                            ) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const card.Card(
-                                  Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              }
-                              //Если сервер не отвечает
-                              if (snapshot.data == null) {
-                                return const card.Card(
-                                  Center(
-                                    child:
-                                        Text('Check your internet connection!'),
-                                  ),
-                                );
-                              }
-                              //получаем данные о характеристиках
-                              final Map<String, dynamic> cChars =
-                                  snapshot.data as Map<String, dynamic>;
-                              final List<String> urls = <String>[];
-                              for (int i = 0;
-                                  i < (cChars['images_urls'].length as int);
-                                  i++) {
-                                urls.add('http://' +
-                                    cChars['images_urls'][i].toString());
-                              }
-                              //получаем ссылку на автомобиль
-                              final String url = snap.data?[index] as String;
-                              return FavouriteCard(cardUrl: url);
-                            },
+                        itemCount: state.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return BlocProvider<CardBloc>(
+                            create: (BuildContext context) => CardBloc(
+                              apiProvider: appLocator.get<ApiProvider>(),
+                            ),
+                            child: CarCard(
+                              cardUrl: state.data[index],
+                              isFavourite: true,
+                            ),
                           );
                         },
                       ),

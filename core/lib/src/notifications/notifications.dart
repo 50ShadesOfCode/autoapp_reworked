@@ -4,16 +4,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-///плагин для получения доступа к уведомлениям
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final NotificationService _notificationService =
+    appLocator.get<NotificationService>();
 
-///функция для повторения уведомлений каждый час
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    _notificationService.flutterLocalNotificationsPlugin;
+
 Future<void> repeatNotificationHourly() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
     '123',
-    'Auto App',
+    'Happy Wheels',
   );
   const NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: androidPlatformChannelSpecifics,
@@ -21,9 +22,9 @@ Future<void> repeatNotificationHourly() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String? url = prefs.getString('noturl');
   if (url == null) return;
-  await flutterLocalNotificationsPlugin.periodicallyShow(
+  await _flutterLocalNotificationsPlugin.periodicallyShow(
     0,
-    'Auto App',
+    'Happy Wheels',
     await _getNotsText(url),
     RepeatInterval.hourly,
     platformChannelSpecifics,
@@ -31,12 +32,11 @@ Future<void> repeatNotificationHourly() async {
   );
 }
 
-///функция для повторения уведомлений ежеминутно, использовалась только для их проверки
 Future<void> repeatNotification() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
     '123',
-    'Auto App',
+    'Happy Wheels',
   );
   const NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: androidPlatformChannelSpecifics,
@@ -44,9 +44,9 @@ Future<void> repeatNotification() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String? url = prefs.getString('noturl');
   if (url == null) return;
-  await flutterLocalNotificationsPlugin.periodicallyShow(
+  await _flutterLocalNotificationsPlugin.periodicallyShow(
     0,
-    'Auto App',
+    'Happy Wheels',
     await _getNotsText(url),
     RepeatInterval.everyMinute,
     platformChannelSpecifics,
@@ -54,18 +54,20 @@ Future<void> repeatNotification() async {
   );
 }
 
-///планирует уведомление на 16.00 следующего дня
 Future<void> scheduleDailyFourAMNotification() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String? url = prefs.getString('noturl');
   if (url == null) return;
-  await flutterLocalNotificationsPlugin.zonedSchedule(
+  await _flutterLocalNotificationsPlugin.zonedSchedule(
     0,
-    'Auto App',
+    'Happy Wheels',
     await _getNotsText(url),
     _nextInstanceOfFourAM(),
     const NotificationDetails(
-      android: AndroidNotificationDetails('123', 'Auto App'),
+      android: AndroidNotificationDetails(
+        '123',
+        'Happy Wheels',
+      ),
     ),
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
@@ -75,18 +77,20 @@ Future<void> scheduleDailyFourAMNotification() async {
   scheduleDailyFourAMNotification();
 }
 
-///планирует уведомления каждые 45 минут
 Future<void> schedule45MinNotification() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String? url = prefs.getString('noturl');
   if (url == null) return;
-  await flutterLocalNotificationsPlugin.zonedSchedule(
+  await _flutterLocalNotificationsPlugin.zonedSchedule(
     0,
-    'Auto App',
+    'Happy Wheels',
     await _getNotsText(url),
     _nextInstanceOf45Min(),
     const NotificationDetails(
-      android: AndroidNotificationDetails('123', 'Auto App'),
+      android: AndroidNotificationDetails(
+        '123',
+        'Happy Wheels',
+      ),
     ),
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
@@ -96,12 +100,10 @@ Future<void> schedule45MinNotification() async {
   schedule45MinNotification();
 }
 
-///выключает все уведомления
 Future<void> cancelAllNotifications() async {
-  await flutterLocalNotificationsPlugin.cancelAll();
+  await _flutterLocalNotificationsPlugin.cancelAll();
 }
 
-///получаем следующие 45 минут просто добавляя к времени последнего уведомления 45 минут
 tz.TZDateTime _nextInstanceOf45Min() {
   final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
   tz.TZDateTime scheduledDate = tz.TZDateTime(
@@ -120,7 +122,6 @@ tz.TZDateTime _nextInstanceOf45Min() {
   return scheduledDate;
 }
 
-///получаем следующие 16.00 просто добавляя к 16.00 сегодняшнего дня 1 день
 tz.TZDateTime _nextInstanceOfFourAM() {
   final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
   tz.TZDateTime scheduledDate = tz.TZDateTime(
@@ -138,7 +139,7 @@ tz.TZDateTime _nextInstanceOfFourAM() {
   return scheduledDate;
 }
 
-///получает количество автомобилей по заданным характеристикам с сервера, сравнивает с сохраненным и в зависимости от сравнения выдает текст уведомления
+//TODO: Move to bloc?
 Future<String> _getNotsText(String url) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final ApiProvider provider = appLocator.get<ApiProvider>();
