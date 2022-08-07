@@ -7,6 +7,7 @@ class PrefsProvider {
   static const String _keyDarkTheme = 'darkTheme';
   static const String _keyNotificationsUrl = 'notificationsUrl';
   static const String _keyCarAmount = 'carAmount';
+  static const String _keyNotificationsRate = 'notificationsRate';
 
   Future<void> initializeSharedPreferences() async {
     _sharedPreferences = await SharedPreferences.getInstance();
@@ -47,5 +48,13 @@ class PrefsProvider {
   String getCarAmount() {
     final String? carAmount = _sharedPreferences.getString(_keyCarAmount);
     return carAmount ?? '';
+  }
+
+  int getNotificationRate() {
+    return _sharedPreferences.getInt(_keyNotificationsRate) ?? 0;
+  }
+
+  Future<void> setNotificationsRate(int rate) async {
+    await _sharedPreferences.setInt(_keyNotificationsRate, rate);
   }
 }

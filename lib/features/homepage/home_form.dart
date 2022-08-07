@@ -5,6 +5,7 @@ import 'package:auto_app/features/settings/settings.dart';
 import 'package:auto_app/router/router.dart';
 import 'package:core/core.dart';
 import 'package:core_ui/src/theme_provider.dart';
+import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,8 @@ List<Widget> _buildScreens() {
     SearchPage(),
     BlocProvider<SettingsBloc>(
       create: (_) => SettingsBloc(
+        prefsProvider: appLocator.get<PrefsProvider>(),
+        notificationService: appLocator.get<NotificationService>(),
         appRouter: appLocator.get<AppRouter>(),
         isDarkThemeUseCase: appLocator.get<IsDarkThemeUseCase>(),
         setDarkThemeUseCase: appLocator.get<SetDarkThemeUseCase>(),

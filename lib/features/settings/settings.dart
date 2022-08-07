@@ -1,11 +1,9 @@
 import 'package:auto_app/features/settings/bloc/settings_bloc.dart';
 import 'package:auto_app/features/settings/notifications_page/bloc/notifications_bloc.dart';
 import 'package:auto_app/features/settings/notifications_page/notifications_page.dart';
-import 'package:auto_app/router/router.dart';
 import 'package:core/core.dart';
 import 'package:core_ui/src/theme_provider.dart';
 import 'package:data/data.dart';
-import 'package:data/providers/api_provider.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,30 +96,8 @@ class _SettingsState extends State<Settings> {
                       hint: const Text('Выберите частоту уведомлений'),
                       value: selectedRate,
                       onChanged: (int? value) async {
-                        setState(() {
-                          selectedRate = value!;
-                        });
-                        final SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.setInt('rate', value!);
-                        appLocator
-                            .get<NotificationService>()
-                            .cancelAllNotifications();
-                        if (value == 1) {
-                          appLocator
-                              .get<NotificationService>()
-                              .schedule45MinNotification();
-                        }
-                        if (value == 2) {
-                          appLocator
-                              .get<NotificationService>()
-                              .repeatNotificationHourly();
-                        }
-                        if (value == 3) {
-                          appLocator
-                              .get<NotificationService>()
-                              .scheduleDailyFourAMNotification();
-                        }
+                        BlocProvider.of<SettingsBloc>(context)
+                            .add(SelectRateEvent(selectedRate: value));
                       },
                       items: <DropdownMenuItem<int>>[
                         DropdownMenuItem<int>(

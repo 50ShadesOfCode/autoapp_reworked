@@ -14,3 +14,11 @@ class SetUsernameEvent extends SettingsEvent {
     required this.username,
   });
 }
+
+class SelectRateEvent extends SettingsEvent {
+  final int? selectedRate;
+
+  SelectRateEvent({
+    required this.selectedRate,
+  });
+}
