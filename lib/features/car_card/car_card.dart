@@ -1,24 +1,16 @@
-import 'dart:io';
-
+import 'package:auto_app/features/car_screen/bloc/car_bloc.dart';
 import 'package:auto_app/features/car_screen/car_page.dart';
 import 'package:auto_app/features/common/card.dart' as card;
 import 'package:auto_app/features/common/carousel_page.dart';
+import 'package:core/core.dart';
+import 'package:data/data.dart';
 import 'package:favorite_button/favorite_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'bloc/card_bloc.dart';
 
 class CarCard extends StatefulWidget {
-  final String cardUrl;
-  final bool isFavourite;
-  const CarCard({
-    required this.cardUrl,
-    required this.isFavourite,
-  });
   @override
   _CarCardState createState() => _CarCardState();
 }
@@ -26,17 +18,6 @@ class CarCard extends StatefulWidget {
 class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-
-  late final String cardUrl;
-  late final bool isFavourite;
-
-  @override
-  void initState() {
-    super.initState();
-    cardUrl = widget.cardUrl;
-    isFavourite = widget.isFavourite;
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -60,10 +41,15 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
             InkWell(
               onTap: () => <void>{
                 Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) =>
-                            CarPage(carUrl: cardUrl)))
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => BlocProvider<CarBloc>(
+                      create: (BuildContext context) =>
+                          CarBloc(apiProvider: appLocator.get<ApiProvider>()),
+                      child: CarPage(carUrl: state.url),
+                    ),
+                  ),
+                )
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +84,7 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                           margin: const EdgeInsets.symmetric(vertical: 3),
                         ),
                         Container(
-                          child: Text(!cardUrl.contains('/new/')
+                          child: Text(!state.url.contains('/new/')
                               ? characteristics['kmage'].toString()
                               : characteristics['complectation'].toString()),
                           margin:
@@ -130,84 +116,22 @@ class _CarCardState extends State<CarCard> with AutomaticKeepAliveClientMixin {
                       ],
                     ),
                   ),
-                  //TODO: Add proper favourite logic
-                  isFavourite
-                      ? Expanded(
-                          flex: 8,
-                          child: IconButton(
-                            iconSize: 35,
-                            icon: const Icon(
-                              CupertinoIcons.clear,
-                            ),
-                            onPressed: () async {
-                              final Directory docsPath =
-                                  await getApplicationDocumentsDirectory();
-                              final Database db = await openDatabase(
-                                docsPath.path + 'autofavs.db',
-                                version: 1,
-                                onCreate: (Database db, int version) async {
-                                  await db.execute('CREATE TABLE Favs ('
-                                      'url TEXT'
-                                      ')');
-                                },
-                              );
-                              db.delete(
-                                'Favs',
-                                where: 'url = ?',
-                                whereArgs: <String>[cardUrl],
-                              );
-                              print('del');
-                              setState(() {});
-                            },
-                          ),
-                        )
-                      : Expanded(
-                          flex: 8,
-                          child: StarButton(
-                            iconSize: 45,
-                            valueChanged: (bool value) async {
-                              if (value) {
-                                final Directory docsPath =
-                                    await getApplicationDocumentsDirectory();
-                                final Database db = await openDatabase(
-                                  docsPath.path + 'autofavs.db',
-                                  version: 1,
-                                  onCreate: (Database db, int version) async {
-                                    await db.execute(
-                                      'CREATE TABLE Favs ('
-                                      'url TEXT'
-                                      ')',
-                                    );
-                                  },
-                                );
-                                await db.rawInsert(
-                                  'INSERT Into Favs (url)'
-                                  ' VALUES (?)',
-                                  <Object>[cardUrl],
-                                );
-                              } else {
-                                final Directory docsPath =
-                                    await getApplicationDocumentsDirectory();
-                                final Database db = await openDatabase(
-                                  docsPath.path + 'autofavs.db',
-                                  version: 1,
-                                  onCreate: (Database db, int version) async {
-                                    await db.execute(
-                                      'CREATE TABLE Favs ('
-                                      'url TEXT'
-                                      ')',
-                                    );
-                                  },
-                                );
-                                db.delete(
-                                  'Favs',
-                                  where: 'url = ?',
-                                  whereArgs: <Object>[cardUrl],
-                                );
-                              }
-                            },
-                          ),
-                        ),
+                  Expanded(
+                    flex: 8,
+                    child: StarButton(
+                      isStarred: state.isFavourite,
+                      iconSize: 45,
+                      valueChanged: (bool value) async {
+                        if (value) {
+                          BlocProvider.of<CardBloc>(context)
+                              .add(AddToFavouriteEvent());
+                        } else {
+                          BlocProvider.of<CardBloc>(context)
+                              .add(RemoveFromFavouriteEvent());
+                        }
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

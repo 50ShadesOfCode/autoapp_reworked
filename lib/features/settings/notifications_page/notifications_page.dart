@@ -2,7 +2,6 @@ import 'package:auto_app/features/common/parameters_page.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsPage extends StatefulWidget {
   @override
@@ -17,7 +16,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       child: Row(
         children: <Widget>[
           Expanded(
-            //при нажатии создает новую ссылку по заданным параметрам
             child: MaterialButton(
               color: Theme.of(context).colorScheme.secondary,
               child: const Text(
@@ -27,8 +25,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
               onPressed: () async {
                 _formKey.currentState?.save();
                 if (_formKey.currentState?.validate() == true) {
-                  print(_formKey.currentState?.value);
-                  //создает
                   final String url = makeUrl(
                       _formKey.currentState?.value as Map<String, dynamic>);
                   print(url);

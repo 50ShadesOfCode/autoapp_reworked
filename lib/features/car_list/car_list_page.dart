@@ -1,11 +1,10 @@
 import 'package:auto_app/features/car_card/bloc/card_bloc.dart';
+import 'package:auto_app/features/car_card/car_card.dart';
+import 'package:auto_app/features/car_list/bloc/car_list_bloc.dart';
 import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../car_card/car_card.dart';
-import 'bloc/car_list_bloc.dart';
 
 //TODO: Пизда нихуя не работает
 
@@ -53,12 +52,8 @@ class _CarListPageState extends State<CarListPage> {
                         return BlocProvider<CardBloc>(
                           create: (BuildContext context) => CardBloc(
                             apiProvider: appLocator.get<ApiProvider>(),
-                          ),
-                          child: CarCard(
-                            cardUrl: state.data[index],
-                            //TODO : add check on favourite
-                            isFavourite: false,
-                          ),
+                          )..add(LoadCardEvent(url: state.data[index])),
+                          child: CarCard(),
                         );
                       },
                     ),

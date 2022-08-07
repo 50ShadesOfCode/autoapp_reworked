@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart';
 @immutable
 abstract class CardEvent {}
 
-class LoadEvent extends CardEvent {
+class LoadCardEvent extends CardEvent {
   final String url;
 
-  LoadEvent({
+  LoadCardEvent({
     required this.url,
   });
 }
+
+class AddToFavouriteEvent extends CardEvent {}
+
+class RemoveFromFavouriteEvent extends CardEvent {}

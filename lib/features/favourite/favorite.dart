@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-//TODO: favs in search
 class Favorite extends StatefulWidget {
   @override
   _FavoriteState createState() => _FavoriteState();
@@ -60,10 +59,7 @@ class _FavoriteState extends State<Favorite> {
                             create: (BuildContext context) => CardBloc(
                               apiProvider: appLocator.get<ApiProvider>(),
                             ),
-                            child: CarCard(
-                              cardUrl: state.data[index],
-                              isFavourite: true,
-                            ),
+                            child: CarCard(),
                           );
                         },
                       ),

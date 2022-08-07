@@ -4,12 +4,10 @@ import 'package:auto_app/features/settings/notifications_page/notifications_page
 import 'package:core/core.dart';
 import 'package:core_ui/src/theme_provider.dart';
 import 'package:data/data.dart';
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -17,7 +15,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  int selectedRate = 0;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _mailController = TextEditingController();
 
@@ -30,6 +27,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (BuildContext context, SettingsState state) => Scaffold(
         appBar: AppBar(
@@ -83,7 +81,17 @@ class _SettingsState extends State<Settings> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       const Text('Темная тема'),
-                      ChangeThemeButtonWidget(),
+                      Switch.adaptive(
+                        value: themeProvider.isDarkMode,
+                        onChanged: (bool value) {
+                          final ThemeProvider provider =
+                              Provider.of<ThemeProvider>(context,
+                                  listen: false);
+                          provider.toggleTheme(value);
+                          BlocProvider.of<SettingsBloc>(context)
+                              .add(SwitchThemeEvent());
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -94,7 +102,7 @@ class _SettingsState extends State<Settings> {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: DropdownButton<int>(
                       hint: const Text('Выберите частоту уведомлений'),
-                      value: selectedRate,
+                      value: state.selectedRate,
                       onChanged: (int? value) async {
                         BlocProvider.of<SettingsBloc>(context)
                             .add(SelectRateEvent(selectedRate: value));
@@ -155,7 +163,6 @@ class _SettingsState extends State<Settings> {
                       ],
                     ),
                   ),
-                  //кнопка для перехода на страницу с параметрами уведомлений
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: TextButton(
@@ -224,22 +231,3 @@ class _SettingsState extends State<Settings> {
     );
   }
 }
-
-class ChangeThemeButtonWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
-    return Switch.adaptive(
-      value: themeProvider.isDarkMode,
-      onChanged: (bool value) {
-        final ThemeProvider provider =
-            Provider.of<ThemeProvider>(context, listen: false);
-        provider.toggleTheme(value);
-        BlocProvider.of<SettingsBloc>(context).add(SwitchThemeEvent());
-      },
-    );
-  }
-}
-
-//список со значениями частот. 0 - вообще нет, 1 - 45 минут, 2 - 1 час, 3 - ежедневно
-List<int> values = <int>[0, 1, 2, 3];

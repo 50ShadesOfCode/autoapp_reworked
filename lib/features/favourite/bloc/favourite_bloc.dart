@@ -38,9 +38,9 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
       },
     );
     final List<Map<String, Object?>> res = await db.query('Favs');
-    final List<FavModel> list =
-        res.isNotEmpty ? res.map(FavModel.fromMap).toList() : <FavModel>[];
-    final List<String> urls = list.map((FavModel e) => e.url).toList();
-    emit(state.copyWith(isLoading: false, data: urls));
+    final List<String> list = res.isNotEmpty
+        ? res.map((Map<String, Object?> e) => FavModel.fromMap(e).url).toList()
+        : <String>[];
+    emit(state.copyWith(isLoading: false, data: list));
   }
 }

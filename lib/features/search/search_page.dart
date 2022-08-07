@@ -40,15 +40,11 @@ class _SearchPageState extends State<SearchPage> {
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () async {
-                //сохраняем и получаем данные о форме
                 _formKey.currentState?.save();
                 if (_formKey.currentState?.validate() == true) {
-                  print(_formKey.currentState?.value);
-                  //создаем ссылку на автомобили
                   final String url = makeUrl(
                       _formKey.currentState?.value as Map<String, dynamic>);
                   print(url);
-                  //переходим на страницу со списком автомобилей
                   Navigator.push(
                     context,
                     MaterialPageRoute<dynamic>(
