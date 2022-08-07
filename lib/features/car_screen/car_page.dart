@@ -1,6 +1,8 @@
+import 'package:auto_app/features/car_screen/bloc/car_bloc.dart';
 import 'package:auto_app/features/common/carousel.dart';
-import 'package:auto_app/features/common/characteristics_page.dart';
+import 'package:auto_app/features/characteristics/characteristics_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //TODO: Move to  apiprovider, add new
@@ -68,11 +70,9 @@ class _CarPageState extends State<CarPage> {
         automaticallyImplyLeading: true,
         title: const Text('Информация об автомобиле'),
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: getCarParameters(carUrl),
-        builder:
-            (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snap) {
-          if (snap.connectionState == ConnectionState.waiting) {
+      body: BlocBuilder<CarBloc, CarState>(
+        builder: (BuildContext context, CarState state) {
+          if (state.isLoading) {
             return Scaffold(
               body: Center(
                 child: Column(
@@ -84,25 +84,14 @@ class _CarPageState extends State<CarPage> {
               ),
             );
           }
-          if (snap.connectionState == ConnectionState.none || !snap.hasData) {
-            return Scaffold(
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[Text('Нет соединения!')],
-                ),
-              ),
-            );
-          }
-          final Map<String, dynamic> cChars = snap.data as Map<String, dynamic>;
           if (!carUrl.contains('/new/')) {
-            chars = formCharacteristics(cChars, 'used');
+            chars = formCharacteristics(state.data, 'used');
           } else {
-            chars = formCharacteristics(cChars, 'new');
+            chars = formCharacteristics(state.data, 'new');
           }
           final List<String> urls = <String>[];
-          for (int i = 0; i < (cChars['images_urls'].length as int); i++) {
-            urls.add(cChars['images_urls'][i] as String);
+          for (int i = 0; i < (state.data['images_urls'].length as int); i++) {
+            urls.add(state.data['images_urls'][i] as String);
           }
           return Scaffold(
             body: Scrollbar(
@@ -176,7 +165,7 @@ class _CarPageState extends State<CarPage> {
                         Container(
                           margin: const EdgeInsets.all(10),
                           child: Text(
-                            cChars['desc'].toString(),
+                            state.data['desc'].toString(),
                             textAlign: TextAlign.start,
                           ),
                         ),
@@ -188,7 +177,8 @@ class _CarPageState extends State<CarPage> {
                                 MaterialPageRoute<dynamic>(
                                     builder: (BuildContext context) =>
                                         CharsPage(
-                                            url: cChars['chars'].toString())),
+                                            url: state.data['chars']
+                                                .toString())),
                               )
                             },
                             child: const Text('Характеристики автомобиля'),

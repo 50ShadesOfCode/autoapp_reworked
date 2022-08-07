@@ -1,17 +1,17 @@
-class CarListState {
+class CarState {
   final bool isLoading;
-  final List<String> data;
+  final Map<String, dynamic> data;
 
-  CarListState({
+  CarState({
     required this.isLoading,
     required this.data,
   });
 
-  CarListState copyWith({
+  CarState copyWith({
     required bool isLoading,
-    required List<String> data,
+    required Map<String, dynamic> data,
   }) =>
-      CarListState(
+      CarState(
         isLoading: isLoading,
         data: data,
       );

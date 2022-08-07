@@ -1,3 +1,5 @@
+import 'package:core/core.dart';
+import 'package:data/data.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -139,7 +141,9 @@ tz.TZDateTime _nextInstanceOfFourAM() {
 ///получает количество автомобилей по заданным характеристикам с сервера, сравнивает с сохраненным и в зависимости от сравнения выдает текст уведомления
 Future<String> _getNotsText(String url) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (res.body == prefs.getString('carups')) {
+  final ApiProvider provider = appLocator.get<ApiProvider>();
+  final String amount = await provider.getNotificationUpdates(url);
+  if (amount == prefs.getString('carups')) {
     return 'Новых поступлений нет!';
   } else {
     return 'Новые поступления по вашим параметрам!';

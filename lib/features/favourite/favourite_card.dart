@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:auto_app/features/common/car_page.dart';
+import 'package:auto_app/features/car_screen/car_page.dart';
 import 'package:auto_app/features/common/card.dart' as card;
 import 'package:auto_app/features/common/carousel_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+//TODO: Use only one card
 class FavouriteCard extends StatefulWidget {
   final String cardUrl;
   const FavouriteCard({required this.cardUrl});

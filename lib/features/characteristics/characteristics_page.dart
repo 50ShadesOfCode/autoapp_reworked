@@ -1,4 +1,6 @@
+import 'package:auto_app/features/characteristics/bloc/characteristics_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CharsPage extends StatefulWidget {
   final String url;
@@ -23,11 +25,9 @@ class _CharsPageState extends State<CharsPage> {
         title: const Text('Характеристики'),
         automaticallyImplyLeading: true,
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: _getParams(url),
-        builder:
-            (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snap) {
-          if (snap.connectionState == ConnectionState.waiting) {
+      body: BlocBuilder<CharacteristicsBloc, CharacteristicsState>(
+        builder: (BuildContext context, CharacteristicsState state) {
+          if (state.isLoading) {
             return Container(
               child: const Center(
                 child: CircularProgressIndicator(),
@@ -36,11 +36,10 @@ class _CharsPageState extends State<CharsPage> {
           } else {
             return Scrollbar(
               child: ListView.builder(
-                itemCount: snap.data?.length,
+                itemCount: state.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   final String key =
-                      (snap.data?.keys.elementAt(index)).toString();
-                  print(snap.data);
+                      (state.data.keys.elementAt(index)).toString();
                   return Container(
                     margin:
                         const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
@@ -52,7 +51,7 @@ class _CharsPageState extends State<CharsPage> {
                         ),
                         Expanded(
                           flex: 50,
-                          child: Text((snap.data?[key]).toString()),
+                          child: Text((state.data[key]).toString()),
                         )
                       ],
                     ),
