@@ -1,6 +1,9 @@
 import 'package:auto_app/features/car_screen/bloc/car_bloc.dart';
-import 'package:auto_app/features/common/carousel.dart';
+import 'package:auto_app/features/characteristics/bloc/characteristics_bloc.dart';
 import 'package:auto_app/features/characteristics/characteristics_page.dart';
+import 'package:auto_app/features/common/carousel.dart';
+import 'package:core/core.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -175,10 +178,18 @@ class _CarPageState extends State<CarPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute<dynamic>(
-                                    builder: (BuildContext context) =>
-                                        CharsPage(
-                                            url: state.data['chars']
-                                                .toString())),
+                                  builder: (BuildContext context) =>
+                                      BlocProvider<CharacteristicsBloc>(
+                                    create: (BuildContext context) =>
+                                        CharacteristicsBloc(
+                                      apiProvider:
+                                          appLocator.get<ApiProvider>(),
+                                    ),
+                                    child: CharsPage(
+                                      url: state.data['chars'].toString(),
+                                    ),
+                                  ),
+                                ),
                               )
                             },
                             child: const Text('Характеристики автомобиля'),

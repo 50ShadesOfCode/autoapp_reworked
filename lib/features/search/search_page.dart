@@ -13,6 +13,7 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
+//TODO: Add search bloc
 class _SearchPageState extends State<SearchPage> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   @override

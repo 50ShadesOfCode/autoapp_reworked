@@ -1,4 +1,5 @@
-import 'package:auto_app/features/favourite/favorite.dart';
+import 'package:auto_app/features/favourite/bloc/favourite_bloc.dart';
+import 'package:auto_app/features/favourite/favourite.dart';
 import 'package:auto_app/features/search/search_page.dart';
 import 'package:auto_app/features/settings/bloc/settings_bloc.dart';
 import 'package:auto_app/features/settings/settings.dart';
@@ -48,7 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
 List<Widget> _buildScreens() {
   return <Widget>[
-    Favorite(),
+    BlocProvider<FavouriteBloc>(
+      create: (BuildContext context) =>
+          FavouriteBloc(apiProvider: appLocator.get<ApiProvider>()),
+      child: Favourite(),
+    ),
     SearchPage(),
     BlocProvider<SettingsBloc>(
       create: (_) => SettingsBloc(

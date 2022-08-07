@@ -7,12 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Favorite extends StatefulWidget {
+class Favourite extends StatefulWidget {
   @override
-  _FavoriteState createState() => _FavoriteState();
+  _FavouriteState createState() => _FavouriteState();
 }
 
-class _FavoriteState extends State<Favorite> {
+class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
