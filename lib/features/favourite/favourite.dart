@@ -43,32 +43,31 @@ class _FavouriteState extends State<Favourite> {
             return const Center(
               child: Text('Пока еще ничего нет!'),
             );
-          } else {
-            return Container(
-              margin: const EdgeInsets.all(5),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Scrollbar(
-                      child: ListView.builder(
-                        itemCount: state.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return BlocProvider<CardBloc>(
-                            create: (BuildContext context) => CardBloc(
-                              apiProvider: appLocator.get<ApiProvider>(),
-                            ),
-                            child: CarCard(),
-                          );
-                        },
-                      ),
+          }
+          return Container(
+            margin: const EdgeInsets.all(5),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemCount: state.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return BlocProvider<CardBloc>(
+                          create: (BuildContext context) => CardBloc(
+                            apiProvider: appLocator.get<ApiProvider>(),
+                          ),
+                          //child: CarCard(),
+                        );
+                      },
                     ),
                   ),
-                ],
-              ),
-            );
-          }
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

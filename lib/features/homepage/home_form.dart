@@ -51,7 +51,8 @@ List<Widget> _buildScreens() {
   return <Widget>[
     BlocProvider<FavouriteBloc>(
       create: (BuildContext context) =>
-          FavouriteBloc(apiProvider: appLocator.get<ApiProvider>()),
+          FavouriteBloc(apiProvider: appLocator.get<ApiProvider>())
+            ..add(LoadEvent()),
       child: Favourite(),
     ),
     SearchPage(),

@@ -46,15 +46,10 @@ class _CarListPageState extends State<CarListPage> {
                 Expanded(
                   child: Scrollbar(
                     child: ListView.builder(
-                      addAutomaticKeepAlives: true,
+                      //addAutomaticKeepAlives: true,
                       itemCount: state.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return BlocProvider<CardBloc>(
-                          create: (BuildContext context) => CardBloc(
-                            apiProvider: appLocator.get<ApiProvider>(),
-                          )..add(LoadCardEvent(url: state.data[index])),
-                          child: CarCard(),
-                        );
+                        return CarCard(car: state.cars[index]);
                       },
                     ),
                   ),

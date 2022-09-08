@@ -1,5 +1,6 @@
 library domain;
 
+export 'entities/car.dart';
 export 'entities/favourite.dart';
 export 'helpers/url_maker.dart';
 export 'notifications/notification_service.dart';

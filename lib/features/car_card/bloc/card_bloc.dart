@@ -32,7 +32,8 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       LoadCardEvent event, Emitter<CardState> emit) async {
     final Map<String, dynamic> data =
         await _apiProvider.getCardByUrl(event.url);
-    final Directory docsPath = await getApplicationDocumentsDirectory();
+    /*final Directory docsPath = await getApplicationDocumentsDirectory();
+    print(docsPath);
     final Database db = await openDatabase(
       docsPath.path + 'autofavs.db',
       version: 1,
@@ -46,12 +47,13 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       'Favs',
       where: 'url = ?',
       whereArgs: <String>[event.url],
-    );
+    );*/
+    //print('db ok');
     emit(state.copyWith(
       url: event.url,
       isLoading: false,
       data: data,
-      isFavourite: result.isNotEmpty,
+      isFavourite: false,
     ));
   }
 

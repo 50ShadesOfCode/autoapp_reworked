@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 @immutable
 abstract class CharacteristicsEvent {}
 
-class LoadEvent extends CharacteristicsEvent {
+class LoadCharsEvent extends CharacteristicsEvent {
   final String url;
 
-  LoadEvent({
+  LoadCharsEvent({
     required this.url,
   });
 }

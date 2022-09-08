@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 @immutable
 abstract class CarListEvent {}
 
-class LoadEvent extends CarListEvent {
+class LoadListEvent extends CarListEvent {
   final String url;
 
-  LoadEvent({
+  LoadListEvent({
     required this.url,
   });
 }

@@ -45,8 +45,7 @@ class _SettingsState extends State<Settings> {
                     Container(
                       child: Expanded(
                         flex: 75,
-                        child: TextFormField(
-                          initialValue: state.username,
+                        child: TextField(
                           decoration: const InputDecoration(
                               hintText: 'Имя пользователя'),
                           controller: _usernameController,

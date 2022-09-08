@@ -56,9 +56,9 @@ class CarPage extends StatefulWidget {
 }
 
 class _CarPageState extends State<CarPage> {
-  late final String carUrl;
+  late String carUrl;
 
-  late final Map<String, String> chars;
+  late Map<String, String> chars;
 
   @override
   void initState() {
@@ -96,113 +96,109 @@ class _CarPageState extends State<CarPage> {
           for (int i = 0; i < (state.data['images_urls'].length as int); i++) {
             urls.add(state.data['images_urls'][i] as String);
           }
-          return Scaffold(
-            body: Scrollbar(
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.only(top: 50),
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: CarouselWithIndicator(
-                            imageUrls: urls,
-                          ),
-                          decoration: const BoxDecoration(
+          return Scrollbar(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: CarouselWithIndicator(
+                          imageUrls: urls,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: const Text(
+                          'Характеристики',
+                          style: TextStyle(
                             color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: const Text(
-                            'Характеристики',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        ListView.builder(
+                      ),
+                      Container(
+                        height: chars.keys.length * 20,
+                        child: ListView.builder(
+                          itemCount: chars.keys.length,
                           itemBuilder: (BuildContext context, int index) {
                             final String key = chars.keys.elementAt(index);
                             return Container(
+                              height: 20,
                               margin: const EdgeInsets.symmetric(vertical: 3),
                               child: Row(
                                 children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      key,
-                                      style:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
-                                    flex: 50,
+                                  Text(
+                                    key,
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      chars[key]!,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                    ),
-                                    flex: 50,
+                                  Text(
+                                    chars[key]!,
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),
                             );
                           },
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          child: const Text(
-                            'Комментарий продавца',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: const Text(
+                          'Комментарий продавца',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.all(10),
-                          child: Text(
-                            state.data['desc'].toString(),
-                            textAlign: TextAlign.start,
-                          ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        child: Text(
+                          state.data['desc'].toString(),
+                          textAlign: TextAlign.start,
                         ),
-                        Container(
-                          child: TextButton(
-                            onPressed: () => <void>{
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<dynamic>(
-                                  builder: (BuildContext context) =>
-                                      BlocProvider<CharacteristicsBloc>(
-                                    create: (BuildContext context) =>
-                                        CharacteristicsBloc(
-                                      apiProvider:
-                                          appLocator.get<ApiProvider>(),
-                                    ),
-                                    child: CharsPage(
-                                      url: state.data['chars'].toString(),
-                                    ),
+                      ),
+                      Container(
+                        child: TextButton(
+                          onPressed: () => <void>{
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) =>
+                                    BlocProvider<CharacteristicsBloc>(
+                                  create: (BuildContext context) =>
+                                      CharacteristicsBloc(
+                                    apiProvider: appLocator.get<ApiProvider>(),
+                                  )..add(LoadCharsEvent(
+                                          url: carUrl,
+                                        )),
+                                  child: CharsPage(
+                                    url: state.data['chars'].toString(),
                                   ),
                                 ),
-                              )
-                            },
-                            child: const Text('Характеристики автомобиля'),
-                          ),
+                              ),
+                            )
+                          },
+                          child: const Text('Характеристики автомобиля'),
                         ),
-                        Container(
-                          child: TextButton(
-                            onPressed: () => <void>{_launchURL(carUrl)},
-                            child: const Text('Ссылка на источник'),
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      Container(
+                        child: TextButton(
+                          onPressed: () => <void>{_launchURL(carUrl)},
+                          child: const Text('Ссылка на источник'),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),

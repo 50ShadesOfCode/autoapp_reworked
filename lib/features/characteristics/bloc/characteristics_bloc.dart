@@ -18,11 +18,11 @@ class CharacteristicsBloc
           isLoading: true,
           data: <String, dynamic>{},
         )) {
-    on<LoadEvent>(_onLoadEvent);
+    on<LoadCharsEvent>(_onLoadEvent);
   }
 
   Future<void> _onLoadEvent(
-      LoadEvent event, Emitter<CharacteristicsState> emit) async {
+      LoadCharsEvent event, Emitter<CharacteristicsState> emit) async {
     final Map<String, dynamic> data =
         await _apiProvider.getCharsByUrl(event.url);
     emit(state.copyWith(isLoading: false, data: data));

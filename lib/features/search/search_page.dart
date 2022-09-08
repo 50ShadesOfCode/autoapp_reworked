@@ -53,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
                           BlocProvider<CarListBloc>(
                         create: (BuildContext context) => CarListBloc(
                           apiProvider: appLocator.get<ApiProvider>(),
-                        ),
+                        )..add(LoadListEvent(url: url)),
                         child: CarListPage(url: url),
                       ),
                     ),

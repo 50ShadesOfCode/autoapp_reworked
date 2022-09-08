@@ -16,11 +16,12 @@ class CardState {
     required Map<String, dynamic> data,
     required bool isFavourite,
     String? url,
-  }) =>
-      CardState(
-        url: url ?? '',
-        isFavourite: isFavourite,
-        isLoading: isLoading,
-        data: data,
-      );
+  }) {
+    return CardState(
+      url: url ?? '',
+      isFavourite: isFavourite,
+      isLoading: isLoading,
+      data: data,
+    );
+  }
 }

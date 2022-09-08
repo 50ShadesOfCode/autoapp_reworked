@@ -33,33 +33,32 @@ class _CharsPageState extends State<CharsPage> {
                 child: CircularProgressIndicator(),
               ),
             );
-          } else {
-            return Scrollbar(
-              child: ListView.builder(
-                itemCount: state.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final String key =
-                      (state.data.keys.elementAt(index)).toString();
-                  return Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(key),
-                          flex: 50,
-                        ),
-                        Expanded(
-                          flex: 50,
-                          child: Text((state.data[key]).toString()),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
           }
+          return Scrollbar(
+            child: ListView.builder(
+              itemCount: state.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                final String key =
+                    (state.data.keys.elementAt(index)).toString();
+                return Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(key),
+                        flex: 50,
+                      ),
+                      Expanded(
+                        flex: 50,
+                        child: Text((state.data[key]).toString()),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
         },
       ),
     );

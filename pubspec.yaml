@@ -65,6 +65,7 @@ flutter:
 
   assets:
     - assets/images/car_logo.png
+    - assets/images/car_logo_new.png
 
   fonts:
     - family: SF UI Display

@@ -19,12 +19,16 @@ class ApiProvider {
     }
     final Map<String, dynamic> resAsJson =
         json.decode(res.body) as Map<String, dynamic>;
-    return resAsJson['urls'] as List<String>;
+    List<String> result = <String>[];
+    for (dynamic d in resAsJson['urls']) {
+      result.add(d.toString());
+    }
+    return result;
   }
 
   Future<Map<String, dynamic>> getCardByUrl(String url) async {
     final Response res = await _client.post(
-      '/getCardByUrl',
+      '/getCarByUrl',
       <String, dynamic>{'url': url},
     );
     if (res.statusCode != 200) {
