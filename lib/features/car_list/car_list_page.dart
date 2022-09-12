@@ -1,12 +1,7 @@
-import 'package:auto_app/features/car_card/bloc/card_bloc.dart';
 import 'package:auto_app/features/car_card/car_card.dart';
 import 'package:auto_app/features/car_list/bloc/car_list_bloc.dart';
-import 'package:core/core.dart';
-import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-//TODO: Пизда нихуя не работает
 
 class CarListPage extends StatefulWidget {
   final String url;
@@ -47,7 +42,7 @@ class _CarListPageState extends State<CarListPage> {
                   child: Scrollbar(
                     child: ListView.builder(
                       //addAutomaticKeepAlives: true,
-                      itemCount: state.data.length,
+                      itemCount: state.data.length - 1,
                       itemBuilder: (BuildContext context, int index) {
                         return CarCard(car: state.cars[index]);
                       },
