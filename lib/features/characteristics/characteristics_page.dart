@@ -3,11 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CharsPage extends StatefulWidget {
+  final String url;
+  const CharsPage({required this.url});
   @override
   _CharsPageState createState() => _CharsPageState();
 }
 
 class _CharsPageState extends State<CharsPage> {
+  late final String url;
+
+  @override
+  void initState() {
+    url = widget.url;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

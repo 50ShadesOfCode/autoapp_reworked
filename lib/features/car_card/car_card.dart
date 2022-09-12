@@ -28,7 +28,6 @@ class _CarCardState extends State<CarCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(car.images[0]);
     return card.Card(
       InkWell(
         onTap: () => <void>{
@@ -37,8 +36,9 @@ class _CarCardState extends State<CarCard> {
             MaterialPageRoute<dynamic>(
               builder: (BuildContext context) => BlocProvider<CarBloc>(
                 create: (BuildContext context) =>
-                    CarBloc(apiProvider: appLocator.get<ApiProvider>()),
-                child: CarPage(car: car),
+                    CarBloc(apiProvider: appLocator.get<ApiProvider>())
+                      ..add(LoadEvent(url: car.url)),
+                child: CarPage(carUrl: car.url),
               ),
             ),
           )
@@ -60,7 +60,7 @@ class _CarCardState extends State<CarCard> {
                 },
                 child: Container(
                   child: Image(
-                    image: NetworkImage(car.images[0].toString()),
+                    image: NetworkImage('http://' + car.images[0].toString()),
                   ),
                 ),
               ),

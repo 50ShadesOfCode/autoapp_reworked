@@ -34,7 +34,7 @@ class CarListBloc extends Bloc<CarListEvent, CarListState> {
       if (carData.isEmpty) continue;
       final List<String> urls = <String>[];
       for (int i = 0; i < (carData['images_urls'].length as int); i++) {
-        urls.add(carData['images_urls'][i].toString());
+        urls.add('http://' + carData['images_urls'][i].toString());
       }
       cars.add(Car(
         isFavourite: false,
