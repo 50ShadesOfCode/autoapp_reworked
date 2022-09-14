@@ -7,7 +7,7 @@
         </intent>
     </queries>
    <application
-        android:label="Auto App"
+        android:label="Happy Wheels"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

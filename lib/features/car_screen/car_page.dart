@@ -180,7 +180,7 @@ class _CarPageState extends State<CarPage> {
                                       CharacteristicsBloc(
                                     apiProvider: appLocator.get<ApiProvider>(),
                                   )..add(LoadCharsEvent(
-                                          url: carUrl,
+                                          url: state.data['chars'].toString(),
                                         )),
                                   child: CharsPage(
                                     url: state.data['chars'].toString(),

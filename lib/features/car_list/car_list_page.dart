@@ -49,7 +49,15 @@ class _CarListPageState extends State<CarListPage> {
                       //addAutomaticKeepAlives: true,
                       itemCount: state.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return CarCard(car: state.cars[index]);
+                        return BlocProvider<CardBloc>(
+                          create: (BuildContext context) => CardBloc(
+                            apiProvider: appLocator.get<ApiProvider>(),
+                          )..add(LoadCardEvent(url: state.cars[index].url)),
+                          child: CarCard(
+                            car: state.cars[index],
+                            isInFavourite: false,
+                          ),
+                        );
                       },
                     ),
                   ),

@@ -23,7 +23,7 @@ class _FavouriteState extends State<Favourite> {
             padding: const EdgeInsets.only(right: 20.0),
             child: InkWell(
               onTap: () {
-                setState(() {});
+                BlocProvider.of<FavouriteBloc>(context).add(LoadEvent());
               },
               child: const Icon(
                 CupertinoIcons.arrow_counterclockwise,
@@ -58,8 +58,11 @@ class _FavouriteState extends State<Favourite> {
                         return BlocProvider<CardBloc>(
                           create: (BuildContext context) => CardBloc(
                             apiProvider: appLocator.get<ApiProvider>(),
+                          )..add(LoadCardEvent(url: state.cars[index].url)),
+                          child: CarCard(
+                            car: state.cars[index],
+                            isInFavourite: true,
                           ),
-                          //child: CarCard(),
                         );
                       },
                     ),

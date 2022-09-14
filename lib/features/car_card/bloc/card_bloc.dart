@@ -30,8 +30,8 @@ class CardBloc extends Bloc<CardEvent, CardState> {
 
   Future<void> _onLoadEvent(
       LoadCardEvent event, Emitter<CardState> emit) async {
-    final Map<String, dynamic> data =
-        await _apiProvider.getCardByUrl(event.url);
+    //final Map<String, dynamic> data =
+    //  await _apiProvider.getCardByUrl(event.url);
     /*final Directory docsPath = await getApplicationDocumentsDirectory();
     print(docsPath);
     final Database db = await openDatabase(
@@ -52,7 +52,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     emit(state.copyWith(
       url: event.url,
       isLoading: false,
-      data: data,
+      data: state.data,
       isFavourite: false,
     ));
   }
@@ -69,10 +69,10 @@ class CardBloc extends Bloc<CardEvent, CardState> {
             ')');
       },
     );
-    db.delete(
-      'Favs',
-      where: 'url = ?',
-      whereArgs: <String>[state.url],
+    await db.rawInsert(
+      'INSERT Into Favs (url)'
+      ' VALUES (?)',
+      <Object>[state.url],
     );
     emit(state.copyWith(
       isLoading: state.isLoading,

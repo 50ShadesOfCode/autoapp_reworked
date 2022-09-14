@@ -13,17 +13,20 @@ import 'bloc/card_bloc.dart';
 
 class CarCard extends StatefulWidget {
   final Car car;
-  const CarCard({required this.car});
+  final bool isInFavourite;
+  const CarCard({required this.car, required this.isInFavourite,});
   @override
   _CarCardState createState() => _CarCardState();
 }
 
 class _CarCardState extends State<CarCard> {
   late Car car;
+  late bool isInFavourite;
   @override
   void initState() {
     super.initState();
     car = widget.car;
+    isInFavourite = widget.isInFavourite;
   }
 
   @override
@@ -60,7 +63,7 @@ class _CarCardState extends State<CarCard> {
                 },
                 child: Container(
                   child: Image(
-                    image: NetworkImage('http://' + car.images[0].toString()),
+                    image: NetworkImage(car.images[0].toString()),
                   ),
                 ),
               ),
@@ -109,7 +112,7 @@ class _CarCardState extends State<CarCard> {
             Expanded(
               flex: 8,
               child: StarButton(
-                isStarred: car.isFavourite,
+                isStarred: isInFavourite,
                 iconSize: 45,
                 valueChanged: (bool value) async {
                   if (value) {
